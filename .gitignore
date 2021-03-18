@@ -1,3 +1,6 @@
 *node_modules
 
-*scripts/*.js
+music_controller/client/static/scripts/index.js
+music_controller/client/static/scripts/index.js.LICENSE.txt
+
+*__pycache__/
