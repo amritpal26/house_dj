@@ -16,6 +16,11 @@ module.exports = {
 					loader: "babel-loader",
 				},
 			},
+			{
+				test: /\.js$/,
+				enforce: 'pre',
+				use: ['source-map-loader'],
+			},
 		],
 	},
 	optimization: {
@@ -24,7 +29,7 @@ module.exports = {
 	plugins: [
 		new webpack.DefinePlugin({
 			"process.env": {
-				NODE_ENV: JSON.stringify("production"),
+				NODE_ENV: JSON.stringify("development"),
 			},
 		}),
 	],
