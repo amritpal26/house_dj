@@ -17,7 +17,7 @@ from django.urls import path
 from .views import index
 
 urlpatterns = [
-    path('create_room', index, name='index'),
+    path('create-room', index, name='index'),
     path('join_room', index, name='index'),
     path('', index, name='index'),
 ]

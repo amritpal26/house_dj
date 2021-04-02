@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import CreateRoom from './CreateRoom';
+import EditRoom from './EditRoom';
 import Home from './Home';
 import JoinRoom from './JoinRoom';
 
@@ -9,7 +9,7 @@ export default function App() {
         <div>
             <Router>
                 <Switch>
-                    <Route path="/create_room" component={ CreateRoom }></Route>
+                    <Route path="/create-room" component={ EditRoom }></Route>
                     <Route path="/join_Room" component={ JoinRoom }></Route>
                     <Route exact path="/" component={ Home }></Route>
                 </Switch>
