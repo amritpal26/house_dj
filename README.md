@@ -11,5 +11,5 @@ Note: make sure the right version of python is installed. This project uses pyth
 
 
 ## Running the project
-1. Start the django server: `cd music_controller; python3 manage.py runserver`
+1. Start the django server: `cd music_controller; python manage.py makemigrations; python manage.py migrate; python manage.py runserver`
 2. Start development frontend react server: `cd music_controller/client; npm install; npm run dev`
