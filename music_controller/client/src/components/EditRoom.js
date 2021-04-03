@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, responsiveFontSizes } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,8 +12,10 @@ import FormControl from "@material-ui/core/FormControl";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-const DEFAULT_VOTES_TO_SKIP = 2;
-const DEFAULT_GUEST_CAN_PAUSE = true;
+import Configs from "../configs";
+
+const DEFAULT_VOTES_TO_SKIP = Configs.constants.DEFAULT_VOTES_TO_SKIP;
+const DEFAULT_GUEST_CAN_PAUSE = Configs.constants.DEFAULT_GUEST_CAN_PAUSE;
 
 const useStyles = makeStyles({
     root: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function EditRoom() {
+export default function EditRoom(props) {
     const [guestCanPause, setGuestCanPause] = useState(DEFAULT_GUEST_CAN_PAUSE);
     const [votesToSkip, setVotesToSkip] = useState(DEFAULT_VOTES_TO_SKIP);
     const classes = useStyles();
@@ -54,7 +56,10 @@ export default function EditRoom() {
 
         fetch('/api/create-room', requestOptions)
             .then((response) => response.json())
-            .then((data) => console.log(data));
+            .then((room) => {
+                console.log(room)
+                props.history.push('/room/' + room.code)
+            });
     };
 
     return (
@@ -73,8 +78,11 @@ export default function EditRoom() {
                     <Grid item xs={12} align="center">
                         <FormControl component="fieldset">
                             <FormControlLabel
-                                defaultValue={DEFAULT_GUEST_CAN_PAUSE}
-                                control={<Switch color="primary" onChange={onGuestCanPauseChange}/>}
+                                control={
+                                    <Switch color="primary"
+                                        defaultChecked={DEFAULT_GUEST_CAN_PAUSE} 
+                                        onChange={onGuestCanPauseChange}
+                                    />}
                                 label="Guest can pause/play music"
                                 labelPlacement="start"
                                 />
