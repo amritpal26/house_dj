@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { login } from '../actions/auth';
 import { makeStyles } from "@material-ui/core/styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Card, Container, Avatar, TextField, Button, Typography, Box, FormControl } from "@material-ui/core";
-
+import { login } from '../actions/auth';
 import TextLine from '../components/TextLine';
+import axios from 'axios';
+import theme from '../theme';
+import Configs from '../configs';
 
 const useStyles = makeStyles(theme => ({
     box: {
@@ -35,7 +37,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2)
     },
     socialLoginButton: {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
+        color: theme.palette.getContrastText(Configs.colors.FACEBOOK_BTN),
+        background: Configs.colors.FACEBOOK_BTN,
     },
     links: {
         marginTop: theme.spacing(2),
@@ -62,13 +66,14 @@ const Login = ({ login, isAuthenticated }) => {
     const continueWithGoogle = async () => {
         console.log('continue with google');
 
-        // try {
-        //     const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}/google`)
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}/google`);
 
-        //     window.location.replace(res.data.authorization_url);
-        // } catch (err) {
-
-        // }
+            console.log('response is', res, res.data);
+            window.location.replace(res.data.authorization_url);
+        } catch (err) {
+            
+        }
     };
 
     const continueWithFacebook = async () => {
@@ -126,23 +131,19 @@ const Login = ({ login, isAuthenticated }) => {
                                     color="primary"
                                 >Sign In</Button>
                             </form>
-                            <TextLine text="OR" />
+                            <TextLine text="OR" marginTop={theme.spacing(2)}/>
                             <FormControl fullWidth >
                                 <Button
                                     fullWidth
-                                    type="submit"
                                     variant="contained"
                                     className={classes.socialLoginButton}
                                     onClick={continueWithGoogle}
-                                    color="secondary"
                                     >Sign in with google</Button>
                                  <Button
                                     fullWidth
-                                    type="submit"
                                     variant="contained"
                                     className={classes.socialLoginButton}
                                     onClick={continueWithFacebook}
-                                    color="secondary"
                                     >Sign in with Facebook</Button>
                             </FormControl>
                             <div className={classes.links}>

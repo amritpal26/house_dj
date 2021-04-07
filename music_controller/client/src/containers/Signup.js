@@ -10,6 +10,7 @@ import TextLine from '../components/TextLine';
 import Configs from "../configs";
 
 import { login } from '../actions/auth';
+import theme from '../theme';
 
 const useStyles = makeStyles(theme => ({
     box: {
@@ -34,11 +35,12 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
         marginTop: theme.spacing(1)
     },
-    signinButton: {
+    registerButton: {
         marginTop: theme.spacing(2)
     },
     links: {
-        textAlign: "center"
+        textAlign: "center",
+        marginTop: theme.spacing(2)
     }
 }));
 
@@ -173,11 +175,11 @@ const Signup = ({ login, isAuthenticated }) => {
                                     fullWidth
                                     type="submit"
                                     variant="contained"
-                                    className={classes.signinButton}
+                                    className={classes.registerButton}
                                     color="primary"
                                 >Register</Button>
                             </ValidatorForm>
-                            <TextLine text="OR" />
+                            <TextLine text="OR" marginTop={theme.spacing(2)}/>
                             <div className={classes.links}>
                                 <Typography component="h1" variant="body2">
                                     Already have an account? <Link to='/login'>Sign In</Link>
