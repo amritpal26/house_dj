@@ -4,13 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .serializers import RoomSerializer, CreateRoomSerializer
-from .models import Room, User
+from .models import Room, UserAccount
 
 # Views.
 class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
@@ -22,7 +21,7 @@ class CreateRoomView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             # TODO: fix after setting Auth. Video-5
-            host = User.objects.first()
+            host = UserAccount.objects.first()
             host_session_key = request.session.session_key
             host.session_key = host_session_key
 

@@ -1,10 +1,19 @@
 from rest_framework import serializers
-from .models import Room, User
+from .models import Room, UserAccount
+from djoser.serializers import UserCreateSerializer
 
+#-----------------------------------------------------
+#------------------ User Authentication --------------
+class UserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = UserAccount
+        fields = ['id', 'email', 'first_name', 'last_name', 'password']
+
+#-----------------------------------------------------
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserAccount
         fields = ['id', 'name', 'session_key']
 
 
