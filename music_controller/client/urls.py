@@ -18,6 +18,9 @@ from .views import index
 
 urlpatterns = [
     path('', index, name='index'),
+    path('login', index, name='index'),
+    path('signup', index, name='index'),
+    path('reset-password', index, name='index'),
     path('create-room', index, name='index'),
     path('join_room', index, name='index'),
     path('room/<str:roomCode>', index, name='index'),
