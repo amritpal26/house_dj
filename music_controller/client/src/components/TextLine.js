@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
-    container: {
-        width: "100%",
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1)
-    }
-}));
-
 const TextLine = (props) => {
+    
+    const useStyles = makeStyles(() => ({
+        container: {
+            width: "100%",
+            marginTop: props.marginTop,
+            marginBottom: props.marginBottom
+        }
+    }));
+
     const classes = useStyles();
     return (
         <div className={classes.container} >
@@ -27,12 +28,16 @@ const TextLine = (props) => {
 
 TextLine.propTypes = {
     text: PropTypes.string,
-    color: PropTypes.string
+    color: PropTypes.string,
+    marginTop: PropTypes.any,
+    marginBottom: PropTypes.any,
 };
 
 TextLine.defaultProps = {
     text: "",
-    color: "black"
+    color: "black",
+    marginTop: 0,
+    marginBottom: 0
 };
 
 export default TextLine;
