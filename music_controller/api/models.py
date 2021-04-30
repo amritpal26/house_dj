@@ -12,6 +12,9 @@ def generate_code(length=8):
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
+        """
+        Creates and saves a user with the given email and password.
+        """
         if not email:
             return ValueError('Users must have a valid email address')
 
@@ -22,12 +25,28 @@ class UserAccountManager(BaseUserManager):
         user.save()
 
         return user
+    
+    def create_superuser(self, email, password, first_name, last_name):
+        """
+        Creates and saves a superuser with the given email and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.CharField(max_length=255, unique=True, null=False)
     first_name = models.CharField(max_length=255, default="", null=False)
     last_name = models.CharField(max_length=255, default="", null=False)
     session_key = models.CharField(max_length=255, default='', null=False)
+
+    is_staff = models.BooleanField(default=False)           # a admin user; non super-user
+    is_superuser = models.BooleanField(default=False)       # a superuser
 
     objects = UserAccountManager()
 

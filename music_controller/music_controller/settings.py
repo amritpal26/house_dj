@@ -26,10 +26,6 @@ SECRET_KEY = 'i623^d@0@q-#i^)6wp^znq68ipxozu#$^%4*!#4h$3$t*7oo+d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:8000",
-# ]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,7 +49,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

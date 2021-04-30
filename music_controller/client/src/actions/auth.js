@@ -19,7 +19,7 @@ export const loadUser = () => async dispatch => {
 
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_RETREIVE_AUTHENTICATED_USER}`, config);
-    
+
             dispatch({
                 type: actionTypes.authActions.USER_LOAD_SUCCESS,
                 payload: res.data
@@ -37,6 +37,7 @@ export const loadUser = () => async dispatch => {
 };
 
 export const checkAuthenticated = () => async dispatch => {
+    console.log('checkAuthenticated');
     if (localStorage.getItem('accessToken')) {
         const config = {
             headers: {
@@ -82,9 +83,8 @@ export const googleAuthenticate = (state, code) => async dispatch => {
         };
 
         const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_RETREIVE_AUTHENTICATED_USER}?${formBody}`, config);
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_GOOGLE_OAUTH_2}?${formBody}`, config);
             
             dispatch({
                 type: actionTypes.authActions.GOOGLE_AUTH_SUCCESS,
@@ -108,6 +108,8 @@ export const signUp = (firstName, lastName, email, password) => dispatch => {
     console.log('signUp called');
 };
 
-export const logout = () => {
-    console.log('logout action called');
+export const logout = () => async dispatch => {
+    dispatch({
+        type: actionTypes.authActions.LOGOUT
+    })
 };

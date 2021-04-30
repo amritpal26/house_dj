@@ -33,10 +33,6 @@ export default function(state = initialState, action) {
                 user: payload
             }
         case actionTypes.authActions.AUTHENTICATION_FAIL:
-            return {
-                ...state,
-                isAuthenticated: false
-            }
         case actionTypes.authActions.LOGIN_FAIL:
         case actionTypes.authActions.GOOGLE_AUTH_FAIL:
         case actionTypes.authActions.LOGOUT:

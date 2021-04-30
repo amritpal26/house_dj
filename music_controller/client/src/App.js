@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Bubbles from './particles/Bubbles';
-import Layout from './particles/Layout';
+import Layout from './hocs/Layout';
 import theme from './theme';
 import { ThemeProvider } from '@material-ui/styles';
 
