@@ -4,7 +4,6 @@ import EditRoom from './components/EditRoom';
 import Home from './components/Home';
 import Room from './components/Room';
 import JoinRoom from './components/JoinRoom';
-import Navbar from './components/Navbar';
 import Login from './containers/Login';
 import Signup from './containers/Signup';
 import ResetPassword from './containers/ResetPassword';

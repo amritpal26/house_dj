@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Navbar = ({ logout, isAuthenticated }) => {
+const Navbar = ({ isAuthenticated, logout }) => {
     const [redirect, setRedirect] = useState(null);
 
     const logout_user = () => {

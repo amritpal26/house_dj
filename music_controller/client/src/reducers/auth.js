@@ -19,13 +19,13 @@ export default function(state = initialState, action) {
             }
         case actionTypes.authActions.LOGIN_SUCCESS:
         case actionTypes.authActions.GOOGLE_AUTH_SUCCESS:
-            localStorage.setItem('accessToken', payload.accessToken);
-            localStorage.setItem('refreshToken', payload.refreshToken);
+            localStorage.setItem('accessToken', payload.access);
+            localStorage.setItem('refreshToken', payload.refresh);
             return {
                 ...state,
                 isAuthenticated: true,
-                accessToken: payload.accessToken,
-                refreshToken: payload.refreshToken
+                accessToken: payload.access,
+                refreshToken: payload.refresh
             }
         case actionTypes.authActions.USER_LOAD_SUCCESS:
             return {
