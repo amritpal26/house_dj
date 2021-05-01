@@ -6,6 +6,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Card, Container, Avatar, TextField, Button, Typography, Box, FormControl } from "@material-ui/core";
 import { login } from '../actions/auth';
 import TextLine from '../components/TextLine';
+import PageLoader from '../components/PageLoader';
 import axios from 'axios';
 import theme from '../theme';
 import Configs from '../configs';
@@ -48,6 +49,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Login = ({ login, isAuthenticated }) => {
+
+    if (isAuthenticated == null) {
+        return (<PageLoader></PageLoader>);
+    } else if (isAuthenticated) {
+        return (<Redirect to="/" />);
+    }
 
     const [formData, setFormData] = useState({
         email: '',

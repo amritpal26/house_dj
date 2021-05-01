@@ -7,6 +7,7 @@ import { Card, Container, Avatar, Button, Typography, Box } from "@material-ui/c
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 import TextLine from '../components/TextLine';
+import PageLoader from '../components/PageLoader';
 import Configs from "../configs";
 
 import { login } from '../actions/auth';
@@ -46,8 +47,10 @@ const useStyles = makeStyles(theme => ({
 
 const Signup = ({ login, isAuthenticated }) => {
 
-    if (isAuthenticated) {
-        return <Redirect to='/' />
+    if (isAuthenticated == null) {
+        return (<PageLoader></PageLoader>);
+    } else if (isAuthenticated) {
+        return (<Redirect to="/" />);
     }
 
     const [formData, setFormData] = useState({
