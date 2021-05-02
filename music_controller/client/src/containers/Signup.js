@@ -7,11 +7,11 @@ import { Card, Container, Avatar, Button, Typography, Box } from "@material-ui/c
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 import TextLine from '../components/TextLine';
+import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import Configs from "../configs";
-
-import { login } from '../actions/auth';
 import theme from '../theme';
+import { signUp } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
     box: {
@@ -45,25 +45,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Signup = ({ login, isAuthenticated }) => {
-
-    if (isAuthenticated == null) {
-        return (<PageLoader></PageLoader>);
-    } else if (isAuthenticated) {
-        return (<Redirect to="/" />);
-    }
-
+const Signup = ({ signUp, isAuthenticated }) => {
+    const classes = useStyles();
+    const [isLoading, setIsLoading] = useState(false);
+    const [accountCreated, setAccountCreated] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         confirmPassword: ''
-    });
-
-    const onChange = e => setFormData({ 
-        ...formData, 
-        [e.target.name]: e.target.value 
     });
 
     useEffect(() => {
@@ -75,6 +66,7 @@ const Signup = ({ login, isAuthenticated }) => {
         });
 
         ValidatorForm.addValidationRule('isPassword', (value) => {
+            // TODO: need to match password validator with the backend.
             if (value.length < Configs.constants.PASSWORD_MIN_LENGTH) {
                 return false;
             }
@@ -82,18 +74,40 @@ const Signup = ({ login, isAuthenticated }) => {
         });
 
         return () => {
+            ValidatorForm.removeValidationRule('isPassword');
             ValidatorForm.removeValidationRule('isPasswordMatch');
         }
     });
 
+    const onChange = e => setFormData({
+        ...formData, 
+        [e.target.name]: e.target.value 
+    });
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-
-        login(formData.email, password);
+    const onSignupSuccess = () => {
+        setIsLoading(false);
+        setAccountCreated(true);
     };
 
-    const classes = useStyles();
+    const onSignupFailure = () => {
+        // TODO: show error message here.
+        setIsLoading(false);
+    };
+
+    const onSubmit = async (e) => {
+        setIsLoading(true);
+        e.preventDefault();
+        signUp(formData.firstName, formData.lastName, formData.email, formData.password, formData.confirmPassword, onSignupSuccess, onSignupFailure);
+    };
+
+    if (isAuthenticated == null) {
+        return (<PageLoader></PageLoader>);
+    } else if (isAuthenticated) {
+        return (<Redirect to="/" />);
+    } else if (accountCreated) {
+        return (<Redirect to="/login" />);
+    }
+
     return (
         <div>
             <Box className={classes.box}>
@@ -174,13 +188,20 @@ const Signup = ({ login, isAuthenticated }) => {
                                     validators={['isPasswordMatch', 'required']}
                                     errorMessages={['Password Mismatch', 'This field is required', ]}
                                 />
-                                <Button
+                                <LoadingButton
+                                    fullWidth
+                                    className={classes.registerButton}
+                                    isLoading={isLoading}
+                                    onClick={onSubmit}
+                                >Register
+                                </LoadingButton>
+                                {/* <Button
                                     fullWidth
                                     type="submit"
                                     variant="contained"
                                     className={classes.registerButton}
                                     color="primary"
-                                >Register</Button>
+                                >Register</Button> */}
                             </ValidatorForm>
                             <TextLine text="OR" marginTop={theme.spacing(2)}/>
                             <div className={classes.links}>
@@ -200,4 +221,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { login })(Signup);
+export default connect(mapStateToProps, { signUp })(Signup);

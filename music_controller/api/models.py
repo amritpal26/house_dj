@@ -21,6 +21,9 @@ class UserAccountManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **kwargs)
 
+        user.is_superuser = False
+        user.is_staff = False
+
         user.set_password(password)
         user.save()
 
@@ -47,6 +50,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)           # a admin user; non super-user
     is_superuser = models.BooleanField(default=False)       # a superuser
+    is_active = models.BooleanField(default=True)          # instead of deleting user, mark as false.
 
     objects = UserAccountManager()
 

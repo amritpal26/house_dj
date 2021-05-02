@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { purple, green, red, white, black } from '@material-ui/core/colors';
+import { purple, green, red, blue, white, black } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
     palette: {
@@ -12,12 +12,18 @@ const theme = createMuiTheme({
     },
     typography: {
         h5: {
-            color: "white"
+            color: white
         },
         h4: {
             color: white
         }
     },
 });
+
+export const Colors = {
+    // Buttons
+    FACEBOOK_BTN: blue[500],
+    GOOGLE_BTN: blue[500],
+};
 
 export default theme;

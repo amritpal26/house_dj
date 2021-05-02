@@ -27,6 +27,11 @@ export default function(state = initialState, action) {
                 accessToken: payload.access,
                 refreshToken: payload.refresh
             }
+        case actionTypes.authActions.SIGNUP_SUCCESS:
+            return {
+                ...state,
+                isAuthenticated: false
+            }
         case actionTypes.authActions.USER_LOAD_SUCCESS:
             return {
                 ...state,
@@ -35,6 +40,7 @@ export default function(state = initialState, action) {
         case actionTypes.authActions.AUTHENTICATION_FAIL:
         case actionTypes.authActions.LOGIN_FAIL:
         case actionTypes.authActions.GOOGLE_AUTH_FAIL:
+        case actionTypes.authActions.SIGNUP_FAIL:
         case actionTypes.authActions.LOGOUT:
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
@@ -49,6 +55,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 user: null
+            }
+        case actionTypes.authActions.ACTIVATION_SUCCESS:
+        case actionTypes.authActions.ACTIVATION_FAIL:
+            return {
+                ...state
             }
         default:
             return state

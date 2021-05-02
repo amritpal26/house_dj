@@ -1,5 +1,3 @@
-import {red, blue} from "@material-ui/core/colors";
-
 const Constants = {
     // App 
     APP_NAME: 'House DJ',
@@ -11,14 +9,6 @@ const Constants = {
     DEFAULT_VOTES_TO_SKIP: 2,
 };
 
-const Colors = {
-    // Buttons
-    FACEBOOK_BTN: blue[500],
-    GOOGLE_BTN: blue[500],
-
-};
-
 export default {
-    constants: Constants,
-    colors: Colors,
+    constants: Constants
 }

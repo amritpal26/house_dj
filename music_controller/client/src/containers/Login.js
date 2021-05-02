@@ -8,8 +8,7 @@ import { login } from '../actions/auth';
 import TextLine from '../components/TextLine';
 import PageLoader from '../components/PageLoader';
 import axios from 'axios';
-import theme from '../theme';
-import Configs from '../configs';
+import theme, { Colors } from '../theme';
 
 const useStyles = makeStyles(theme => ({
     box: {
@@ -39,8 +38,8 @@ const useStyles = makeStyles(theme => ({
     },
     socialLoginButton: {
         marginTop: theme.spacing(2),
-        color: theme.palette.getContrastText(Configs.colors.FACEBOOK_BTN),
-        background: Configs.colors.FACEBOOK_BTN,
+        color: theme.palette.getContrastText(Colors.FACEBOOK_BTN),
+        background: Colors.FACEBOOK_BTN,
     },
     links: {
         marginTop: theme.spacing(2),

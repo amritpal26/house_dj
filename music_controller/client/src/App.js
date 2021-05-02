@@ -7,6 +7,7 @@ import JoinRoom from './components/JoinRoom';
 import Login from './containers/Login';
 import Signup from './containers/Signup';
 import ResetPassword from './containers/ResetPassword';
+import Activate from './containers/Activate';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -28,6 +29,7 @@ export default function App() {
                                 <Switch>
                                     <Route exact path='/login' component={ Login } />
                                     <Route exact path='/signup' component={ Signup } />
+                                    <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
                                     <Route path="/create-room" component={ EditRoom }></Route>
                                     <Route path="/room/:roomCode" component={ Room }></Route>

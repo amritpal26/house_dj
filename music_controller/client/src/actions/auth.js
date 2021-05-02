@@ -4,6 +4,8 @@ import actionTypes from './actionTypes';
 const URL_RETREIVE_AUTHENTICATED_USER = '/auth/users/me/';
 const URL_GOOGLE_OAUTH_2 = '/auth/o/google-oauth2/';
 const URL_CHECK_USER_AUTHENTICATED_JWT = '/auth/jwt/verify/';
+const URL_SIGNUP_USER = '/auth/users/';
+const URL_USER_ACTIVATION = '/auth/users/activation/';
 
 export const loadUser = () => async dispatch => {
     if (localStorage.getItem('accessToken')) {
@@ -107,8 +109,54 @@ export const login = (email, password) => dispatch =>  {
     console.log('called action');
 };
 
-export const signUp = (firstName, lastName, email, password) => dispatch => {
-    console.log('signUp called');
+export const signUp = (first_name, last_name, email, password, re_password, onSuccess, onFailure) => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const body = JSON.stringify({ first_name, last_name, email, password, re_password });
+    console.log('signUp called', body);
+
+    try {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_SIGNUP_USER}`, body, config);
+        
+        onSuccess();
+        dispatch({
+            type: actionTypes.authActions.SIGNUP_SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        onFailure();
+        dispatch({
+            type: actionTypes.authActions.SIGNUP_FAIL
+        })
+    }
+};
+
+export const verify = (uid, token, onSuccess, onFailure) => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const body = JSON.stringify({ uid, token });
+
+    try {
+        await axios.post(`${process.env.REACT_APP_API_URL}${URL_USER_ACTIVATION}`, body, config);
+        
+        onSuccess();
+        dispatch({
+            type: actionTypes.authActions.ACTIVATION_SUCCESS
+        });
+    } catch (err) {
+        onFailure();
+        dispatch({
+            type: actionTypes.authActions.ACTIVATION_FAIL
+        });
+    }
 };
 
 export const logout = () => async dispatch => {
