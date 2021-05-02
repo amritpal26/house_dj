@@ -11,7 +11,7 @@ import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import Configs from "../configs";
 import theme from '../theme';
-import { signUp } from '../actions/auth';
+import { signup } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
     box: {
@@ -221,4 +221,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { signUp })(Signup);
+export default connect(mapStateToProps, { signUp: signup })(Signup);

@@ -109,7 +109,7 @@ export const login = (email, password) => dispatch =>  {
     console.log('called action');
 };
 
-export const signUp = (first_name, last_name, email, password, re_password, onSuccess, onFailure) => async dispatch => {
+export const signup = (first_name, last_name, email, password, re_password, onSuccess, onFailure) => async dispatch => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -135,7 +135,7 @@ export const signUp = (first_name, last_name, email, password, re_password, onSu
     }
 };
 
-export const verify = (uid, token, onSuccess, onFailure) => async dispatch => {
+export const activate = (uid, token, onSuccess, onFailure) => async dispatch => {
     const config = {
         headers: {
             'Content-Type': 'application/json'

@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Card, Typography } from "@material-ui/core";
-import { verify } from '../actions/auth';
+import { activate } from '../actions/auth';
 import LoadingButton from '../components/LoadingButton';
 
 const useStyles = makeStyles(theme => ({
@@ -74,4 +74,4 @@ const Activate = ({ verify, match }) => {
 };
 
 
-export default connect(null, { verify })(Activate);
+export default connect(null, { verify: activate })(Activate);
