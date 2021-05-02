@@ -1,14 +1,21 @@
-import React, { Fragment, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Redirect, useHistory, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 
 import { logout } from '../actions/auth';
 import Configs from '../configs';
+import { Colors } from '../theme';
 
 
 const useStyles = makeStyles((theme) => ({
+    link: {
+        textDecoration: 'none'
+    },
+    linkButton: {
+        color: Colors.NAVBAR_LINKS_TEXT
+    },
     spacedIcon: {
         marginRight: theme.spacing(1),
     },
@@ -21,29 +28,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = ({ isAuthenticated, logout }) => {
-    const [redirect, setRedirect] = useState(null);
-
-    const logout_user = () => {
-        logout();
-        setRedirect('/');
-    };
-
     const classes = useStyles();
+    const history = useHistory();
+    const [redirect, setRedirect] = useState(null);
+    const [_, setShouldRedirect] = useState(false);
+
+    useEffect(() => {
+        return history.listen((location) => {
+            setRedirect(location.pathname);
+            console.log(`You changed the page to: ${location.pathname}`);
+        });
+     },[history]);
+
+    const logoutUser = () => {
+        logout();
+        setRedirect('/login');
+    };
 
     const guestLinks = () => (
         <Fragment>
-            <IconButton size="small" color="inherit" className={classes.spacedIcon} onClick={() => setRedirect('login')}>
-                Login
-            </IconButton>
-            <IconButton size="small" color="inherit" onClick={() => setRedirect('/signup')}>
-                Sign Up
-            </IconButton>
+            <NavLink className={classes.link} to='/login'>
+                <IconButton size="small" className={`${classes.linkButton} ${classes.spacedIcon}`}>
+                    Login
+                </IconButton>
+            </NavLink>
+            <NavLink className={classes.link} to='/signup'>
+                <IconButton size="small" className={classes.linkButton}>
+                    Sign Up
+                </IconButton>
+            </NavLink>
         </Fragment >
     );
 
     const authorizedLinks = () => (
         <Fragment>
-            <IconButton size="small" color="inherit" onClick={logout_user}>
+            <IconButton size="small" className={classes.linkButton} onClick={logoutUser}>
                 Logout
             </IconButton>
         </Fragment >

@@ -32,10 +32,6 @@ const Activate = ({ verify, match }) => {
     const [isLoading, setIsLoading] = useState(false);
     const classes = useStyles();
 
-    if (isVerified) {
-        return (<Redirect to="/"/>);
-    }
-
     const onSuccess = () => {
         setIsVerified(true);
         setIsLoading(false);
@@ -55,6 +51,10 @@ const Activate = ({ verify, match }) => {
         verify(uid, token, onSuccess, onFailure);
     }
 
+    if (isVerified) {
+        return (<Redirect to="/login"/>);
+    }
+
     return (
         <Box className={classes.box}>
             <Card className={classes.card} >
@@ -72,6 +72,5 @@ const Activate = ({ verify, match }) => {
         </Box>
     );
 };
-
 
 export default connect(null, { verify: activate })(Activate);
