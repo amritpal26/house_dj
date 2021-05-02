@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Redirect, useHistory, NavLink } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
@@ -29,20 +29,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = ({ isAuthenticated, logout }) => {
     const classes = useStyles();
-    const history = useHistory();
-    const [redirect, setRedirect] = useState(null);
-    const [_, setShouldRedirect] = useState(false);
-
-    useEffect(() => {
-        return history.listen((location) => {
-            setRedirect(location.pathname);
-            console.log(`You changed the page to: ${location.pathname}`);
-        });
-     },[history]);
 
     const logoutUser = () => {
         logout();
-        setRedirect('/login');
     };
 
     const guestLinks = () => (
@@ -78,7 +67,6 @@ const Navbar = ({ isAuthenticated, logout }) => {
                     {isAuthenticated ? authorizedLinks() : guestLinks()}
                 </Toolbar>
             </AppBar>
-            {redirect ? <Redirect to={redirect} /> : <Fragment></Fragment>}
         </Fragment>
     );
 };
