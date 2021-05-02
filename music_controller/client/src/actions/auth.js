@@ -4,6 +4,7 @@ import actionTypes from './actionTypes';
 const URL_RETREIVE_AUTHENTICATED_USER = '/auth/users/me/';
 const URL_GOOGLE_OAUTH_2 = '/auth/o/google-oauth2/';
 const URL_CHECK_USER_AUTHENTICATED_JWT = '/auth/jwt/verify/';
+const URL_LOGIN_USER = '/auth/jwt/create/';
 const URL_SIGNUP_USER = '/auth/users/';
 const URL_USER_ACTIVATION = '/auth/users/activation/';
 
@@ -105,8 +106,31 @@ export const googleAuthenticate = (state, code) => async dispatch => {
     }
 };
 
-export const login = (email, password) => dispatch =>  {
-    console.log('called action');
+export const login = (email, password, onSuccess, onFailure) => async dispatch =>  {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const body = JSON.stringify({ email, password });
+
+    try {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_LOGIN_USER}`, body, config);
+        
+        onSuccess();
+        dispatch({
+            type: actionTypes.authActions.LOGIN_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch(loadUser());
+    } catch (err) {
+        onFailure();
+        dispatch({
+            type: actionTypes.authActions.LOGIN_FAIL
+        })
+    }
 };
 
 export const signup = (first_name, last_name, email, password, re_password, onSuccess, onFailure) => async dispatch => {

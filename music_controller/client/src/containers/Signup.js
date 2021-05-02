@@ -195,13 +195,6 @@ const Signup = ({ signUp, isAuthenticated }) => {
                                     onClick={onSubmit}
                                 >Register
                                 </LoadingButton>
-                                {/* <Button
-                                    fullWidth
-                                    type="submit"
-                                    variant="contained"
-                                    className={classes.registerButton}
-                                    color="primary"
-                                >Register</Button> */}
                             </ValidatorForm>
                             <TextLine text="OR" marginTop={theme.spacing(2)}/>
                             <div className={classes.links}>
