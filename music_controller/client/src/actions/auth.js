@@ -74,7 +74,7 @@ export const checkAuthenticated = () => async dispatch => {
     }
 };
 
-export const googleAuthenticate = (state, code) => async dispatch => {
+export const googleAuthenticate = (state, code, onSuccess, onFailure) => async dispatch => {
     if (state && code && !localStorage.getItem('accessToken')) {
         const config = {
             headers: {
@@ -97,17 +97,19 @@ export const googleAuthenticate = (state, code) => async dispatch => {
             });
 
             dispatch(loadUser());
+            onSuccess();
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.GOOGLE_AUTH_FAIL
             });
+            onFailure(err);
         }
     } else {
 
     }
 };
 
-export const facebookAuthenticate = (state, code) => async dispatch => {
+export const facebookAuthenticate = (state, code, onSuccess, onFailure) => async dispatch => {
     if (state && code && !localStorage.getItem('accessToken')) {
         const config = {
             headers: {
@@ -130,10 +132,12 @@ export const facebookAuthenticate = (state, code) => async dispatch => {
             });
 
             dispatch(loadUser());
+            onSuccess();
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.FACEBOOK_AUTH_FAIL
             });
+            onFailure(err);
         }
     } else {
 
