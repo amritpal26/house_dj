@@ -4,8 +4,12 @@ import EditRoom from './components/EditRoom';
 import Home from './components/Home';
 import Room from './components/Room';
 import JoinRoom from './components/JoinRoom';
+
+// Auth
 import Login from './containers/Login';
 import Signup from './containers/Signup';
+import Google from './containers/Google';
+import Facebook from './containers/Facebook';
 import ResetPassword from './containers/ResetPassword';
 import Activate from './containers/Activate';
 
@@ -29,6 +33,8 @@ export default function App() {
                                 <Switch>
                                     <Route exact path='/login' component={ Login } />
                                     <Route exact path='/signup' component={ Signup } />
+                                    <Route exact path='/facebook' component={Facebook} />
+                                    <Route exact path='/google' component={Google} />
                                     <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
                                     <Route path="/create-room" component={ EditRoom }></Route>

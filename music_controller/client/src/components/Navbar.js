@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
+import { NavLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
@@ -29,9 +29,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = ({ isAuthenticated, logout }) => {
     const classes = useStyles();
+    const [loggedOut, setLoggedOut] = useState(false);
 
     const logoutUser = () => {
-        logout();
+        logout(() => { setLoggedOut(true) });
     };
 
     const guestLinks = () => (
@@ -56,6 +57,12 @@ const Navbar = ({ isAuthenticated, logout }) => {
             </IconButton>
         </Fragment >
     );
+
+    if (loggedOut) {
+        return (
+            <Redirect to="/login"></Redirect>
+        );
+    }
 
     return (
         <Fragment>

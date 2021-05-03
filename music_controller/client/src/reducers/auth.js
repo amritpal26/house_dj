@@ -19,6 +19,7 @@ export default function(state = initialState, action) {
             }
         case actionTypes.authActions.LOGIN_SUCCESS:
         case actionTypes.authActions.GOOGLE_AUTH_SUCCESS:
+        case actionTypes.authActions.FACEBOOK_AUTH_SUCCESS:
             localStorage.setItem('accessToken', payload.access);
             localStorage.setItem('refreshToken', payload.refresh);
             return {
@@ -40,6 +41,7 @@ export default function(state = initialState, action) {
         case actionTypes.authActions.AUTHENTICATION_FAIL:
         case actionTypes.authActions.LOGIN_FAIL:
         case actionTypes.authActions.GOOGLE_AUTH_FAIL:
+        case actionTypes.authActions.FACEBOOK_AUTH_FAIL:
         case actionTypes.authActions.SIGNUP_FAIL:
         case actionTypes.authActions.LOGOUT:
             localStorage.removeItem('accessToken');

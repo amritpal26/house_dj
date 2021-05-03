@@ -3,24 +3,18 @@ import Navbar from '../components/Navbar';
 import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { checkAuthenticated, loadUser, googleAuthenticate } from '../actions/auth';
-import queryString from 'query-string';
 
-const Layout = ({ checkAuthenticated, loadUser, googleAuthenticate, children }) => {
-    
+const noAuthPathnames = ['/google', '/facebook', '/login', '/signup'];
+
+const Layout = ({ checkAuthenticated, loadUser, children }) => {
     let location = useLocation();
 
     useEffect(() => {
-        const values = queryString.parse(location.search);
-        const state = values.state ? values.state : null;
-        const code = values.code ? values.code : null;
-
-        if (state && code) {
-            googleAuthenticate(state, code);
-        } else {
+        if (!noAuthPathnames.includes(location.pathname)) {
             checkAuthenticated();
             loadUser();
         }
-    }, []);
+    }, [location]);
 
     return (
         <div>
