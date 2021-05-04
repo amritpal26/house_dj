@@ -57,24 +57,24 @@ export const checkAuthenticated = (onSuccess, onFailure) => async dispatch => {
                 dispatch({
                     type: actionTypes.authActions.AUTHENTICATION_SUCCESS
                 });
-                onSuccess();
+                onSuccess && onSuccess();
             } else {
                 dispatch({
                     type: actionTypes.authActions.AUTHENTICATION_FAIL
                 });
-                onFailure(res.data.code);
+                onFailure && onFailure(res.data.code);
             }
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.AUTHENTICATION_FAIL
             });
-            onFailure(err);
+            onFailure && onFailure(err);
         }
     } else {
         dispatch({
             type: actionTypes.authActions.AUTHENTICATION_FAIL
         });
-        onFailure(null);
+        onFailure && onFailure(null);
     }
 };
 
@@ -101,7 +101,7 @@ export const googleAuthenticate = (state, code, onSuccess, onFailure) => async d
             });
 
             dispatch(loadUser());
-            onSuccess();
+            onSuccess && onSuccess();
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.GOOGLE_AUTH_FAIL
@@ -136,7 +136,7 @@ export const facebookAuthenticate = (state, code, onSuccess, onFailure) => async
             });
 
             dispatch(loadUser());
-            onSuccess();
+            onSuccess && onSuccess();
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.FACEBOOK_AUTH_FAIL
@@ -160,7 +160,7 @@ export const login = (email, password, onSuccess, onFailure) => async dispatch =
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_LOGIN_USER}`, body, config);
         
-        onSuccess();
+        onSuccess && onSuccess();
         dispatch({
             type: actionTypes.authActions.LOGIN_SUCCESS,
             payload: res.data
@@ -168,7 +168,7 @@ export const login = (email, password, onSuccess, onFailure) => async dispatch =
 
         dispatch(loadUser());
     } catch (err) {
-        onFailure();
+        onSuccess && onFailure();
         dispatch({
             type: actionTypes.authActions.LOGIN_FAIL
         })
@@ -188,13 +188,13 @@ export const signup = (first_name, last_name, email, password, re_password, onSu
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_SIGNUP_USER}`, body, config);
         
-        onSuccess();
+        onSuccess && onSuccess();
         dispatch({
             type: actionTypes.authActions.SIGNUP_SUCCESS,
             payload: res.data
         });
     } catch (err) {
-        onFailure();
+        onSuccess && onFailure();
         dispatch({
             type: actionTypes.authActions.SIGNUP_FAIL
         })
@@ -213,12 +213,12 @@ export const activate = (uid, token, onSuccess, onFailure) => async dispatch => 
     try {
         await axios.post(`${process.env.REACT_APP_API_URL}${URL_USER_ACTIVATION}`, body, config);
         
-        onSuccess();
+        onSuccess && onSuccess();
         dispatch({
             type: actionTypes.authActions.ACTIVATION_SUCCESS
         });
     } catch (err) {
-        onFailure();
+        onSuccess && onFailure();
         dispatch({
             type: actionTypes.authActions.ACTIVATION_FAIL
         });
@@ -230,5 +230,5 @@ export const logout = (onSuccess) => async dispatch => {
         type: actionTypes.authActions.LOGOUT
     });
 
-    onSuccess();
+    onSuccess && onSuccess();
 };

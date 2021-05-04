@@ -4,6 +4,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import { checkAuthenticated, loadUser } from '../actions/auth';
+import Configs from '../configs';
 
 const useStyles = makeStyles(() => ({
     container: { 
@@ -12,8 +13,6 @@ const useStyles = makeStyles(() => ({
         height: '100%' 
     }
 }));
-
-const noAuthPathnames = ['/google', '/facebook', '/login', '/signup'];
 
 const Layout = ({ checkAuthenticated, loadUser, children }) => {
     const classes = useStyles();
@@ -33,8 +32,10 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
     }
 
     useEffect(() => {
-        if (!noAuthPathnames.includes(location.pathname)) {
+        if (!Configs.NoAuthPaths.includes(location.pathname)) {
             checkAuthenticated(authCheckSuccess, authCheckFailed);
+        } else {
+            checkAuthenticated(null, null);
         }
     }, [location]);
 

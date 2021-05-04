@@ -115,7 +115,7 @@ const Login = ({ login, isAuthenticated }) => {
                     </Avatar>
                     <Typography component='h1' variant='h4'>
                         Sign in
-                            </Typography>
+                    </Typography>
                     <form className={classes.form} noValidate autoComplete='none' onSubmit={e => onSubmit(e)}>
                         <TextField
                             required
@@ -145,7 +145,7 @@ const Login = ({ login, isAuthenticated }) => {
                             isLoading={isLoading}
                             onClick={onSubmit}
                         >Sign In
-                                </LoadingButton>
+                        </LoadingButton>
                     </form>
                     <TextLine text='OR' marginTop={theme.spacing(2)} />
                     <FormControl fullWidth >

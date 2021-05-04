@@ -33,8 +33,8 @@ export default function App() {
                                 <Switch>
                                     <Route exact path='/login' component={ Login } />
                                     <Route exact path='/signup' component={ Signup } />
-                                    <Route exact path='/facebook' component={Facebook} />
-                                    <Route exact path='/google' component={Google} />
+                                    <Route exact path='/facebook' component={ Facebook } />
+                                    <Route exact path='/google' component={ Google } />
                                     <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
                                     <Route path="/create-room" component={ EditRoom }></Route>
