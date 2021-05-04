@@ -9,7 +9,7 @@ const URL_LOGIN_USER = '/auth/jwt/create/';
 const URL_SIGNUP_USER = '/auth/users/';
 const URL_USER_ACTIVATION = '/auth/users/activation/';
 
-export const loadUser = () => async dispatch => {
+export const loadUser = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
 
         const config = {
@@ -39,7 +39,7 @@ export const loadUser = () => async dispatch => {
     }
 };
 
-export const checkAuthenticated = () => async dispatch => {
+export const checkAuthenticated = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
         const config = {
             headers: {
@@ -57,20 +57,24 @@ export const checkAuthenticated = () => async dispatch => {
                 dispatch({
                     type: actionTypes.authActions.AUTHENTICATION_SUCCESS
                 });
+                onSuccess();
             } else {
                 dispatch({
                     type: actionTypes.authActions.AUTHENTICATION_FAIL
                 });
+                onFailure(res.data.code);
             }
         } catch (err) {
             dispatch({
                 type: actionTypes.authActions.AUTHENTICATION_FAIL
             });
+            onFailure(err);
         }
     } else {
         dispatch({
             type: actionTypes.authActions.AUTHENTICATION_FAIL
         });
+        onFailure(null);
     }
 };
 
