@@ -27,6 +27,7 @@ const LoadingButton = (props) => {
                 <Button
                     variant="contained"
                     color="primary"
+                    type="submit"
                     fullWidth={props.fullWidth}
                     disabled={props.isLoading}
                     onClick={props.onClick}

@@ -8,6 +8,8 @@ const URL_FACEBOOK_OAUTH_2 = '/auth/o/facebook/';
 const URL_LOGIN_USER = '/auth/jwt/create/';
 const URL_SIGNUP_USER = '/auth/users/';
 const URL_USER_ACTIVATION = '/auth/users/activation/';
+const URL_PASSWORD_RESET = '/auth/users/reset_password/';
+const URL_PASSWORD_RESET_CONFIRM = '/auth/users/reset_password_confirm/';
 
 export const loadUser = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
@@ -222,6 +224,30 @@ export const activate = (uid, token, onSuccess, onFailure) => async dispatch => 
         dispatch({
             type: actionTypes.authActions.ACTIVATION_FAIL
         });
+    }
+};
+
+export const resetPassword = (email, onSuccess, onFailure) => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const body = JSON.stringify({ email });
+
+    try {
+        await axios.post(`${process.env.REACT_APP_API_URL}${URL_PASSWORD_RESET}`, body, config);
+
+        dispatch({
+            type: actionTypes.authActions.PASSWORD_RESET_SUCCESS
+        });
+        onSuccess && onSuccess();
+    } catch (err) {
+        dispatch({
+            type: actionTypes.authActions.PASSWORD_RESET_FAIL
+        });
+        onFailure(err);
     }
 };
 
