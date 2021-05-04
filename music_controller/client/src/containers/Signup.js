@@ -193,7 +193,6 @@ const Signup = ({ signUp, isAuthenticated }) => {
                             fullWidth
                             className={classes.registerButton}
                             isLoading={isLoading}
-                            onClick={onSubmit}
                         >Register
                                 </LoadingButton>
                     </ValidatorForm>
