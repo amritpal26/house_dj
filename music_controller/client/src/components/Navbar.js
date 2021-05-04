@@ -66,7 +66,7 @@ const Navbar = ({ isAuthenticated, logout }) => {
 
     return (
         <Fragment>
-            <AppBar >
+            <AppBar position="relative">
                 <Toolbar variant="dense">
                     <Typography variant="h5" color="inherit" className={classes.title}>
                         {Configs.constants.APP_NAME}

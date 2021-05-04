@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { makeStyles } from "@material-ui/core/styles";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { Card, Container, Avatar, TextField, Button, Typography, Box, FormControl } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Card, Avatar, TextField, Button, Typography, Box, FormControl } from '@material-ui/core';
 import { login } from '../actions/auth';
 import TextLine from '../components/TextLine';
 import LoadingButton from '../components/LoadingButton';
@@ -13,25 +13,28 @@ import theme, { Colors } from '../theme';
 
 const useStyles = makeStyles(theme => ({
     box: {
-        display: "flex",
-        minHeight: "100vh",
-        alignItems: "center"
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     card: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
+        minWidth: '360px'
     },
     paper: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifySelf: "center"
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifySelf: 'center'
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: "#00b8d4"
+        backgroundColor: '#00b8d4'
     },
     form: {
-        width: "100%",
+        width: '100%',
         marginTop: theme.spacing(1)
     },
     signInButton: {
@@ -44,24 +47,23 @@ const useStyles = makeStyles(theme => ({
     },
     links: {
         marginTop: theme.spacing(2),
-        textAlign: "center"
+        textAlign: 'center'
     }
 }));
 
 const Login = ({ login, isAuthenticated }) => {
     const classes = useStyles();
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-
-    const onChange = e => setFormData({ 
-        ...formData, 
-        [e.target.name]: e.target.value 
+    const onChange = e => setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
     });
-    
+
     const onLoginSuccess = () => {
         setIsLoading(false);
     };
@@ -101,80 +103,76 @@ const Login = ({ login, isAuthenticated }) => {
     if (isAuthenticated == null) {
         return (<PageLoader></PageLoader>);
     } else if (isAuthenticated) {
-        return (<Redirect to="/" />);
+        return (<Redirect to='/' />);
     }
 
     return (
-        <div>
-            <Box className={classes.box}>
-                <Container component="main" maxWidth="xs" >
-                    <Card className={classes.card} >
-                        <div className={classes.paper}>
-                            <Avatar className={classes.avatar}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h4">
-                                Sign in
+        <Box className={classes.box}>
+            <Card className={classes.card} >
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component='h1' variant='h4'>
+                        Sign in
                             </Typography>
-                            <form className={classes.form} noValidate autoComplete="none" onSubmit={e => onSubmit(e)}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    autoFocus
-                                    name="email"
-                                    variant="outlined"
-                                    label="Email Address"
-                                    margin="normal"
-                                    autoComplete="none"
-                                    onChange={onChange}
-                                />
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    variant="outlined"
-                                    margin="normal"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    onChange={onChange}
-                                />
-                                <LoadingButton
-                                    fullWidth
-                                    className={classes.signInButton}
-                                    isLoading={isLoading}
-                                    onClick={onSubmit}
-                                >Sign In
+                    <form className={classes.form} noValidate autoComplete='none' onSubmit={e => onSubmit(e)}>
+                        <TextField
+                            required
+                            fullWidth
+                            autoFocus
+                            name='email'
+                            variant='outlined'
+                            label='Email Address'
+                            margin='normal'
+                            autoComplete='none'
+                            onChange={onChange}
+                        />
+                        <TextField
+                            required
+                            fullWidth
+                            name='password'
+                            variant='outlined'
+                            margin='normal'
+                            label='Password'
+                            type='password'
+                            autoComplete='new-password'
+                            onChange={onChange}
+                        />
+                        <LoadingButton
+                            fullWidth
+                            className={classes.signInButton}
+                            isLoading={isLoading}
+                            onClick={onSubmit}
+                        >Sign In
                                 </LoadingButton>
-                            </form>
-                            <TextLine text="OR" marginTop={theme.spacing(2)}/>
-                            <FormControl fullWidth >
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    className={classes.socialLoginButton}
-                                    onClick={continueWithGoogle}
-                                    >Sign in with google</Button>
-                                 <Button
-                                    fullWidth
-                                    variant="contained"
-                                    className={classes.socialLoginButton}
-                                    onClick={continueWithFacebook}
-                                    >Sign in with Facebook</Button>
-                            </FormControl>
-                            <div className={classes.links}>
-                                <Typography component="h1" variant="body2">
-                                    Don't have an account? <Link to='/signup'>Sign Up</Link>
-                                </Typography>
-                                <Typography component="h1" variant="body2">
-                                    Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
-                                </Typography>
-                            </div>
-                        </div>
-                    </Card>
-                </Container>
-            </Box>
-        </div>
+                    </form>
+                    <TextLine text='OR' marginTop={theme.spacing(2)} />
+                    <FormControl fullWidth >
+                        <Button
+                            fullWidth
+                            variant='contained'
+                            className={classes.socialLoginButton}
+                            onClick={continueWithGoogle}
+                        >Sign in with google</Button>
+                        <Button
+                            fullWidth
+                            variant='contained'
+                            className={classes.socialLoginButton}
+                            onClick={continueWithFacebook}
+                        >Sign in with Facebook</Button>
+                    </FormControl>
+                    <div className={classes.links}>
+                        <Typography component='h1' variant='body2'>
+                            Don't have an account? <Link to='/signup'>Sign Up</Link>
+                        </Typography>
+                        <Typography component='h1' variant='body2'>
+                            Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
+                        </Typography>
+                    </div>
+                </div>
+            </Card>
+        </Box>
     );
 };
 

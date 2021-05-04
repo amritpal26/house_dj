@@ -1,46 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { makeStyles } from "@material-ui/core/styles";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { Card, Container, Avatar, Button, Typography, Box } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Card, Avatar, Typography, Box } from '@material-ui/core';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 import TextLine from '../components/TextLine';
 import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
-import Configs from "../configs";
+import Configs from '../configs';
 import theme from '../theme';
 import { signup } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
     box: {
-        display: "flex",
-        minHeight: "100vh",
-        alignItems: "center"
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     card: {
         padding: theme.spacing(2),
+        minWidth: '360px'
     },
     paper: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifySelf: "center"
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifySelf: 'center'
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: "#00b8d4"
+        backgroundColor: '#00b8d4'
     },
     form: {
-        width: "100%",
+        width: '100%',
         marginTop: theme.spacing(1)
     },
     registerButton: {
         marginTop: theme.spacing(2)
     },
     links: {
-        textAlign: "center",
+        textAlign: 'center',
         marginTop: theme.spacing(2)
     }
 }));
@@ -80,8 +83,8 @@ const Signup = ({ signUp, isAuthenticated }) => {
     });
 
     const onChange = e => setFormData({
-        ...formData, 
-        [e.target.name]: e.target.value 
+        ...formData,
+        [e.target.name]: e.target.value
     });
 
     const onSignupSuccess = () => {
@@ -103,110 +106,106 @@ const Signup = ({ signUp, isAuthenticated }) => {
     if (isAuthenticated == null) {
         return (<PageLoader></PageLoader>);
     } else if (isAuthenticated) {
-        return (<Redirect to="/" />);
+        return (<Redirect to='/' />);
     } else if (accountCreated) {
-        return (<Redirect to="/login" />);
+        return (<Redirect to='/login' />);
     }
 
     return (
-        <div>
-            <Box className={classes.box}>
-                <Container component="main" maxWidth="xs" >
-                    <Card className={classes.card} >
-                        <div className={classes.paper}>
-                            <Avatar className={classes.avatar}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h4">
-                                Sign Up
+        <Box className={classes.box}>
+            <Card className={classes.card} >
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component='h1' variant='h4'>
+                        Sign Up
                             </Typography>
-                            <ValidatorForm
-                                instantValidate={false}
-                                className={classes.form} 
-                                autoComplete="none" 
-                                onSubmit={e => onSubmit(e)}>
-                                <TextValidator
-                                    fullWidth
-                                    autoFocus
-                                    name="firstName"
-                                    variant="outlined"
-                                    label="First Name"
-                                    margin="normal"
-                                    autoComplete="none"
-                                    onChange={ onChange }
-                                    value={ formData.firstName }
-                                    validators={['required']}
-                                    errorMessages={['This field is required']}
-                                />
-                                <TextValidator
-                                    fullWidth
-                                    name="lastName"
-                                    variant="outlined"
-                                    label="Last Name"
-                                    margin="normal"
-                                    autoComplete="none"
-                                    onChange={ onChange }
-                                    value={ formData.lastName }
-                                    validators={['required']}
-                                    errorMessages={['This field is required']}
-                                />
-                                <TextValidator
-                                    fullWidth
-                                    name="email"
-                                    variant="outlined"
-                                    label="Email Address"
-                                    margin="normal"
-                                    autoComplete="none"
-                                    onChange={ onChange }
-                                    value={ formData.email }
-                                    validators={['required', 'isEmail']}
-                                    errorMessages={['This field is required', 'Email is not valid']}
-                                />
-                                <TextValidator
-                                    fullWidth
-                                    name="password"
-                                    variant="outlined"
-                                    margin="normal"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    onChange={ onChange }
-                                    value={ formData.password }
-                                    validators={['required', 'isPassword']}
-                                    errorMessages={['This field is required', `Password should be atleast ${Configs.constants.PASSWORD_MIN_LENGTH} characters`]}
-                                />
-                                <TextValidator
-                                    fullWidth
-                                    name="confirmPassword"
-                                    variant="outlined"
-                                    margin="normal"
-                                    label="Confirm Password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    onChange={ onChange }
-                                    value={ formData.confirmPassword }
-                                    validators={['isPasswordMatch', 'required']}
-                                    errorMessages={['Password Mismatch', 'This field is required', ]}
-                                />
-                                <LoadingButton
-                                    fullWidth
-                                    className={classes.registerButton}
-                                    isLoading={isLoading}
-                                    onClick={onSubmit}
-                                >Register
+                    <ValidatorForm
+                        instantValidate={false}
+                        className={classes.form}
+                        autoComplete='none'
+                        onSubmit={e => onSubmit(e)}>
+                        <TextValidator
+                            fullWidth
+                            autoFocus
+                            name='firstName'
+                            variant='outlined'
+                            label='First Name'
+                            margin='normal'
+                            autoComplete='none'
+                            onChange={onChange}
+                            value={formData.firstName}
+                            validators={['required']}
+                            errorMessages={['This field is required']}
+                        />
+                        <TextValidator
+                            fullWidth
+                            name='lastName'
+                            variant='outlined'
+                            label='Last Name'
+                            margin='normal'
+                            autoComplete='none'
+                            onChange={onChange}
+                            value={formData.lastName}
+                            validators={['required']}
+                            errorMessages={['This field is required']}
+                        />
+                        <TextValidator
+                            fullWidth
+                            name='email'
+                            variant='outlined'
+                            label='Email Address'
+                            margin='normal'
+                            autoComplete='none'
+                            onChange={onChange}
+                            value={formData.email}
+                            validators={['required', 'isEmail']}
+                            errorMessages={['This field is required', 'Email is not valid']}
+                        />
+                        <TextValidator
+                            fullWidth
+                            name='password'
+                            variant='outlined'
+                            margin='normal'
+                            label='Password'
+                            type='password'
+                            autoComplete='new-password'
+                            onChange={onChange}
+                            value={formData.password}
+                            validators={['required', 'isPassword']}
+                            errorMessages={['This field is required', `Password should be atleast ${Configs.constants.PASSWORD_MIN_LENGTH} characters`]}
+                        />
+                        <TextValidator
+                            fullWidth
+                            name='confirmPassword'
+                            variant='outlined'
+                            margin='normal'
+                            label='Confirm Password'
+                            type='password'
+                            autoComplete='new-password'
+                            onChange={onChange}
+                            value={formData.confirmPassword}
+                            validators={['isPasswordMatch', 'required']}
+                            errorMessages={['Password Mismatch', 'This field is required',]}
+                        />
+                        <LoadingButton
+                            fullWidth
+                            className={classes.registerButton}
+                            isLoading={isLoading}
+                            onClick={onSubmit}
+                        >Register
                                 </LoadingButton>
-                            </ValidatorForm>
-                            <TextLine text="OR" marginTop={theme.spacing(2)}/>
-                            <div className={classes.links}>
-                                <Typography component="h1" variant="body2">
-                                    Already have an account? <Link to='/login'>Sign In</Link>
-                                </Typography>
-                            </div>
-                        </div>
-                    </Card>
-                </Container>
-            </Box>
-        </div>
+                    </ValidatorForm>
+                    <TextLine text='OR' marginTop={theme.spacing(2)} />
+                    <div className={classes.links}>
+                        <Typography component='h1' variant='body2'>
+                            Already have an account? <Link to='/login'>Sign In</Link>
+                        </Typography>
+                    </div>
+                </div>
+            </Card>
+        </Box>
     );
 };
 
