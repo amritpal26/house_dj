@@ -11,6 +11,7 @@ import Signup from './containers/Signup';
 import Google from './containers/Google';
 import Facebook from './containers/Facebook';
 import ResetPassword from './containers/ResetPassword';
+import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
 import Activate from './containers/Activate';
 
 import { Provider } from 'react-redux';
@@ -37,6 +38,7 @@ export default function App() {
                                     <Route exact path='/google' component={ Google } />
                                     <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
+                                    <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
                                     <Route path="/create-room" component={ EditRoom }></Route>
                                     <Route path="/room/:roomCode" component={ Room }></Route>
                                     <Route path="/join_Room" component={ JoinRoom }></Route>

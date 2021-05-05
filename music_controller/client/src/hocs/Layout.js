@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory, matchPath } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import { checkAuthenticated, loadUser } from '../actions/auth';
@@ -27,12 +27,16 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
     }
     const authCheckFailed = (err) => {
         // TODO: print message.
-        console.log('auth check has failed');
         history.replace('/login');
     }
 
     useEffect(() => {
-        if (!Configs.NoAuthPaths.includes(location.pathname)) {
+        const currentPath = location.pathname;
+        const matchingNoAuthPaths = Configs.NoAuthPaths.filter((path) => {
+            return matchPath(currentPath, path) !== null
+        });
+        
+        if (matchingNoAuthPaths.length == 0) {
             checkAuthenticated(authCheckSuccess, authCheckFailed);
         } else {
             checkAuthenticated(null, null);

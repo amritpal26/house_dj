@@ -14,8 +14,9 @@ const noAuthPathnames = [
     '/facebook', 
     '/login', 
     '/signup', 
+    '/activate/:uid/:token',
     '/reset-password',
-    '/reset-password-confirm'
+    '/password/reset/confirm/:uid/:token'
 ];
 
 export default {

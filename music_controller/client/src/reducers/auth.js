@@ -58,6 +58,10 @@ export default function(state = initialState, action) {
                 ...state,
                 user: null
             }
+        case actionTypes.authActions.PASSWORD_RESET_SUCCESS:
+        case actionTypes.authActions.PASSWORD_RESET_FAIL:
+        case actionTypes.authActions.PASSWORD_RESET_CONFIRM_SUCCESS:
+        case actionTypes.authActions.PASSWORD_RESET_CONFIRM_FAIL:
         case actionTypes.authActions.ACTIVATION_SUCCESS:
         case actionTypes.authActions.ACTIVATION_FAIL:
             return {

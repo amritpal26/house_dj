@@ -108,7 +108,7 @@ export const googleAuthenticate = (state, code, onSuccess, onFailure) => async d
             dispatch({
                 type: actionTypes.authActions.GOOGLE_AUTH_FAIL
             });
-            onFailure(err);
+            onFailure && onFailure(err);
         }
     } else {
 
@@ -143,7 +143,7 @@ export const facebookAuthenticate = (state, code, onSuccess, onFailure) => async
             dispatch({
                 type: actionTypes.authActions.FACEBOOK_AUTH_FAIL
             });
-            onFailure(err);
+            onFailure && onFailure(err);
         }
     } else {
 
@@ -170,7 +170,7 @@ export const login = (email, password, onSuccess, onFailure) => async dispatch =
 
         dispatch(loadUser());
     } catch (err) {
-        onSuccess && onFailure();
+        onSuccess && onFailure(err);
         dispatch({
             type: actionTypes.authActions.LOGIN_FAIL
         })
@@ -196,7 +196,7 @@ export const signup = (first_name, last_name, email, password, re_password, onSu
             payload: res.data
         });
     } catch (err) {
-        onSuccess && onFailure();
+        onFailure && onFailure(err);
         dispatch({
             type: actionTypes.authActions.SIGNUP_FAIL
         })
@@ -220,7 +220,7 @@ export const activate = (uid, token, onSuccess, onFailure) => async dispatch => 
             type: actionTypes.authActions.ACTIVATION_SUCCESS
         });
     } catch (err) {
-        onSuccess && onFailure();
+        onFailure && onFailure(err);
         dispatch({
             type: actionTypes.authActions.ACTIVATION_FAIL
         });
@@ -247,7 +247,31 @@ export const resetPassword = (email, onSuccess, onFailure) => async dispatch => 
         dispatch({
             type: actionTypes.authActions.PASSWORD_RESET_FAIL
         });
-        onFailure(err);
+        onFailure && onFailure(err);
+    }
+};
+
+export const resetPasswordConfirm = (uid, token, new_password, re_new_password, onSuccess, onFailure) => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const body = JSON.stringify({ uid, token, new_password, re_new_password });
+
+    try {
+        await axios.post(`${process.env.REACT_APP_API_URL}${URL_PASSWORD_RESET_CONFIRM}`, body, config);
+
+        dispatch({
+            type: actionTypes.authActions.PASSWORD_RESET_CONFIRM_SUCCESS
+        });
+        onSuccess && onSuccess();
+    } catch (err) {
+        dispatch({
+            type: actionTypes.authActions.PASSWORD_RESET_CONFIRM_FAIL
+        });
+        onFailure && onFailure(err.response);
     }
 };
 
