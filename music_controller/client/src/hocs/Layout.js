@@ -40,13 +40,12 @@ const Layout = ({ error, checkAuthenticated, loadUser, hideError, showError, chi
 
     const authCheckSuccess = () => {
         loadUser(null, () => {
-            // TODO: print message.
+            showError('Failed to load data from server. Try again.')
             history.replace('/login');
         });
     }
 
     const authCheckFailed = (err) => {
-        showError('auth Failed mitra!');
         history.replace('/login');
     }
 

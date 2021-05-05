@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useLocation } from 'react-router';
 import { googleAuthenticate } from '../actions/auth';
+import { showError } from '../actions/alert';
 import PageLoader from '../components/PageLoader';
 import queryString from 'query-string';
 
-const Google = ({ googleAuthenticate }) => {
+const Google = ({ googleAuthenticate, showError }) => {
     const location = useLocation();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authFailed, setAuthFailed] = useState(false);
@@ -15,6 +16,7 @@ const Google = ({ googleAuthenticate }) => {
     };
 
     const onAuthFailure = (err) => {
+        showError('Something wrong happened. Try again');
         setAuthFailed(true);
     };
 
@@ -29,7 +31,6 @@ const Google = ({ googleAuthenticate }) => {
     }, [location]);
 
     if (authFailed) {
-        // TODO: show some error message and redirect to login page.
         return <Redirect to="/login"></Redirect>
     } else if (isAuthenticated) {
         return <Redirect to="/"></Redirect>
@@ -40,4 +41,4 @@ const Google = ({ googleAuthenticate }) => {
     );
 };
 
-export default connect(null, { googleAuthenticate })(Google);
+export default connect(null, { googleAuthenticate, showError })(Google);

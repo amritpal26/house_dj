@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useLocation } from 'react-router';
 import { facebookAuthenticate } from '../actions/auth';
+import { showError } from '../actions/alert';
 import PageLoader from '../components/PageLoader';
 import queryString from 'query-string';
 
-const Facebook = ({ facebookAuthenticate }) => {
+const Facebook = ({ facebookAuthenticate, showError }) => {
     const location = useLocation();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authFailed, setAuthFailed] = useState(false);
@@ -15,6 +16,7 @@ const Facebook = ({ facebookAuthenticate }) => {
     };
 
     const onAuthFailure = (err) => {
+        showError('Something wrong happened. Try again');
         setAuthFailed(true);
     };
 
@@ -30,7 +32,6 @@ const Facebook = ({ facebookAuthenticate }) => {
     }, [location]);
 
     if (authFailed) {
-        // TODO: show some error message and redirect to login page.
         return <Redirect to="/login"></Redirect>
     } else if (isAuthenticated) {
         return <Redirect to="/"></Redirect>
@@ -41,4 +42,4 @@ const Facebook = ({ facebookAuthenticate }) => {
     );
 };
 
-export default connect(null, { facebookAuthenticate })(Facebook);
+export default connect(null, { facebookAuthenticate, showError })(Facebook);

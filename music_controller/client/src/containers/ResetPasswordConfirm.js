@@ -7,6 +7,7 @@ import { Box, Card, Avatar, Typography } from '@material-ui/core';
 import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import { resetPasswordConfirm } from '../actions/auth';
+import { showError } from '../actions/alert';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import Configs from '../configs';
 
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ResetPasswordConfirm = ({ match, isAuthenticated, resetPasswordConfirm }) => {
+const ResetPasswordConfirm = ({ match, isAuthenticated, resetPasswordConfirm, showError }) => {
     const classes = useStyles();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
@@ -83,8 +84,8 @@ const ResetPasswordConfirm = ({ match, isAuthenticated, resetPasswordConfirm }) 
     }
 
     const onFailure = (err) => {
-        // TODO: show error message and do not navigate to login.
         console.log('Failed setting password: ', err.data.token);
+        showError('Something wrong happened. Try again');
         history.replace('/login')
     }
 
@@ -164,4 +165,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { resetPasswordConfirm })(ResetPasswordConfirm);
+export default connect(mapStateToProps, { resetPasswordConfirm, showError })(ResetPasswordConfirm);
