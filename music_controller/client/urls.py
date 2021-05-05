@@ -23,6 +23,7 @@ urlpatterns = [
     path('login', index, name='index'),
     path('signup', index, name='index'),
     path('reset-password', index, name='index'),
+    path('password/reset/confirm/<str:uid>/<str:token>', index, name='index'),
     path('activate/<str:uid>/<str:token>', index, name='index'),
 
     # Rooms

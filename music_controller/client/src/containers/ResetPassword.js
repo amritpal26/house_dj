@@ -35,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#00b8d4'
     },
     formContainer: {
-        display: 'contents',
+        marginTop: '50px',
+        width: '360px',
+        textAlign: 'center'
     },
     form: {
         width: '100%',
@@ -50,12 +52,13 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
     const classes = useStyles();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false)
+    const [emailConfirmed, setEmailConfirmed] = useState(false);
     const [email, setEmail] = useState('');
 
     const onEmailChange = e => setEmail(e.target.value);
     
     const onSuccess = () => {
-        history.push('/reset-password-confirm');
+        setEmailConfirmed(true);
     }
 
     const onFailure = (err) => {
@@ -86,7 +89,17 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
                     <Typography component='h1' variant='h4'>
                         Reset Password
                     </Typography>
-                    <div className={classes.formContainer}>
+
+                    {emailConfirmed && <div className={classes.formContainer}>
+                        <Typography component='p' variant='h6'>
+                            Email Confirmed
+                        </Typography>
+                        <Typography component='p' variant='body1'>
+                            Please check your email to for a link to confirm password.
+                        </Typography>
+                    </div>}
+
+                    {!emailConfirmed && <div className={classes.formContainer}>
                         <ValidatorForm
                             instantValidate={false}
                             className={classes.form}
@@ -111,7 +124,7 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
                             >Confirm
                             </LoadingButton>
                         </ValidatorForm>
-                    </div>
+                    </div>}
                 </div>
             </Card>
         </Box>

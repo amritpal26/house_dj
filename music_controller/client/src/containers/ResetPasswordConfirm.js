@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const ResetPasswordConfirm = ({ match, isAuthenticated, resetPasswordConfirm }) => {
     const classes = useStyles();
     const history = useHistory();
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         newPassword: '',
         ReNewPassword: ''
