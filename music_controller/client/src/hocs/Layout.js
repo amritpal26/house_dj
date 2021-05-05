@@ -2,22 +2,41 @@ import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useLocation, useHistory, matchPath } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { makeStyles } from "@material-ui/core/styles";
+import { Snackbar, makeStyles } from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
 import { checkAuthenticated, loadUser } from '../actions/auth';
+import { hideError, showError } from '../actions/alert';
 import Configs from '../configs';
 
 const useStyles = makeStyles(() => ({
-    container: { 
+    container: {
         display: 'flex',
-        flexDirection: 'column', 
-        height: '100%' 
+        flexDirection: 'column',
+        height: '100%'
+    },
+    alert: {
+        minWidth: '360px',
+        maxWidth: '720px'
     }
 }));
 
-const Layout = ({ checkAuthenticated, loadUser, children }) => {
+function Alert(props) {
+    return <MuiAlert
+        elevation={6} 
+        variant="filled" 
+        style={{ minWidth: '360px' }}
+        {...props} 
+    />;
+}
+
+const Layout = ({ error, checkAuthenticated, loadUser, hideError, showError, children }) => {
     const classes = useStyles();
     let location = useLocation();
     let history = useHistory();
+
+    const handleClose = () => {
+        hideError();
+    }
 
     const authCheckSuccess = () => {
         loadUser(null, () => {
@@ -25,8 +44,9 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
             history.replace('/login');
         });
     }
+
     const authCheckFailed = (err) => {
-        // TODO: print message.
+        showError('auth Failed mitra!');
         history.replace('/login');
     }
 
@@ -35,7 +55,7 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
         const matchingNoAuthPaths = Configs.NoAuthPaths.filter((path) => {
             return matchPath(currentPath, path) !== null
         });
-        
+
         if (matchingNoAuthPaths.length == 0) {
             checkAuthenticated(authCheckSuccess, authCheckFailed);
         } else {
@@ -43,9 +63,16 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
         }
     }, [location]);
 
+    const errorSnack = (typeof error === 'string' && error.length > 0);
+
     return (
         <div className={classes.container}>
             <Navbar />
+            <Snackbar open={errorSnack} autoHideDuration={6000} onClose={handleClose}>
+                <Alert className={classes.alert} onClose={handleClose} severity='error'>
+                    {error}
+                </Alert>
+            </Snackbar>
             <div style={{ flex: '1' }}>
                 {children}
             </div>
@@ -53,4 +80,8 @@ const Layout = ({ checkAuthenticated, loadUser, children }) => {
     );
 };
 
-export default connect(null, { checkAuthenticated, loadUser })(Layout);
+const mapStateToProps = state => ({
+    error: state.alert.errorMessage
+});
+
+export default connect(mapStateToProps, { checkAuthenticated, loadUser, hideError, showError })(Layout);

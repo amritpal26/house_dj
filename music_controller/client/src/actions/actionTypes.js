@@ -20,8 +20,14 @@ const authActions = {
     FACEBOOK_AUTH_FAIL: 'FACEBOOK_AUTH_FAIL',
 }
 
+const alertActions = {
+    SHOW_ERROR: 'SHOW_ERROR',
+    HIDE_ERROR: 'HIDE_ERROR'
+}
+
 const ActionTypes = {
-    authActions: authActions
+    authActions: authActions,
+    alertAction: alertActions
 };
 
 export default ActionTypes;
