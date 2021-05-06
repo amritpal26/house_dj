@@ -8,6 +8,7 @@ import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import { resetPassword } from '../actions/auth';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     box: {

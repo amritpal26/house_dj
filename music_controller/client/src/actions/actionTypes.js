@@ -25,9 +25,16 @@ const alertActions = {
     HIDE_ERROR: 'HIDE_ERROR'
 }
 
+const roomActions = {
+    CREATE_ROOM: 'CREATE_ROOM',
+    JOIN_ROOM: 'JOIN_ROOM',
+    UPDATE_ROOMS_LIST: 'UPDATE_ROOMS_LIST',
+}
+
 const ActionTypes = {
     authActions: authActions,
-    alertAction: alertActions
+    alertActions: alertActions,
+    roomActions: roomActions,
 };
 
 export default ActionTypes;

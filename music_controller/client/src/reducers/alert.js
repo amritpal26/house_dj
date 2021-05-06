@@ -10,12 +10,12 @@ export default function(state = initialState, action) {
 
     console.log(`dispatching '${type}'`, payload);
     switch(type) {
-        case actionTypes.alertAction.HIDE_ERROR:
+        case actionTypes.alertActions.HIDE_ERROR:
             return {
                 ...state,
                 errorMessage: null
             }
-        case actionTypes.alertAction.SHOW_ERROR:
+        case actionTypes.alertActions.SHOW_ERROR:
             return {
                 ...state,
                 errorMessage: payload
