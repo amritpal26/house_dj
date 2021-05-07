@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Configs from "../configs";
 import { useHistory } from 'react-router';
 import { createRoom } from '../actions/room';
+import { showSuccess } from '../actions/alert';
 import { connect } from 'react-redux';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import {
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const EditRoom = ({ createRoom }) => {
+const EditRoom = ({ createRoom, showSuccess }) => {
     const classes = useStyles();
     const history = useHistory();
     const [isCreatingRoom, setIsCreatingRoom] = useState(false);
@@ -113,6 +114,7 @@ const EditRoom = ({ createRoom }) => {
 
         const onSuccess = (res) => {
             setIsCreatingRoom(false);
+            showSuccess('Room Created');
             console.log('room created', res);
         }
 
@@ -196,4 +198,4 @@ const EditRoom = ({ createRoom }) => {
     );
 }
 
-export default connect(null, { createRoom })(EditRoom);
+export default connect(null, { createRoom, showSuccess })(EditRoom);

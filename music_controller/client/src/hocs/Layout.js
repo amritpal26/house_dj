@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Snackbar, makeStyles } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { checkAuthenticated, loadUser } from '../actions/auth';
-import { hideError, showError } from '../actions/alert';
+import { hideError, hideSuccess, showError } from '../actions/alert';
 import Configs from '../configs';
 
 const useStyles = makeStyles(() => ({
@@ -29,13 +29,17 @@ function Alert(props) {
     />;
 }
 
-const Layout = ({ error, checkAuthenticated, loadUser, hideError, showError, children }) => {
+const Layout = ({ error, success, checkAuthenticated, loadUser, hideError, hideSuccess, showError, children }) => {
     const classes = useStyles();
     let location = useLocation();
     let history = useHistory();
 
-    const handleClose = () => {
-        hideError();
+    const handleClose = (type) => {
+        if (type === 'error') {
+            hideError();
+        } else {
+            hideSuccess();
+        }
     }
 
     const authCheckSuccess = () => {
@@ -63,13 +67,19 @@ const Layout = ({ error, checkAuthenticated, loadUser, hideError, showError, chi
     }, [location]);
 
     const errorSnack = (typeof error === 'string' && error.length > 0);
+    const successSnack = (typeof success === 'string' && success.length > 0);
 
     return (
         <div className={classes.container}>
             <Navbar />
-            <Snackbar open={errorSnack} autoHideDuration={6000} onClose={handleClose}>
-                <Alert className={classes.alert} onClose={handleClose} severity='error'>
+            <Snackbar open={errorSnack} autoHideDuration={6000} onClose={() => handleClose('error')}>
+                <Alert className={classes.alert} onClose={() => handleClose('error')} severity='error'>
                     {error}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={successSnack} autoHideDuration={4000} onClose={() => handleClose('success')}>
+                <Alert className={classes.alert} onClose={() => handleClose('success')} severity='success'>
+                    {success}
                 </Alert>
             </Snackbar>
             <div style={{ flex: '1' }}>
@@ -80,7 +90,8 @@ const Layout = ({ error, checkAuthenticated, loadUser, hideError, showError, chi
 };
 
 const mapStateToProps = state => ({
-    error: state.alert.errorMessage
+    error: state.alert.errorMessage,
+    success: state.alert.successMessage
 });
 
-export default connect(mapStateToProps, { checkAuthenticated, loadUser, hideError, showError })(Layout);
+export default connect(mapStateToProps, { checkAuthenticated, loadUser, hideError, hideSuccess, showError })(Layout);

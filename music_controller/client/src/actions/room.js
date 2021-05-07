@@ -3,7 +3,7 @@ import actionTypes from './actionTypes';
 
 const URL_CREATE_ROOM = '/api/create-room';
 
-export const createRoom = (title, votes_to_skip, guest_can_pause,onSuccess, onFailure) => async dispatch => {
+export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onFailure) => async dispatch => {
     if (!title || !votes_to_skip || !guest_can_pause) {
         onFailure && onFailure('Please fill all the details.');
         return;
@@ -27,14 +27,12 @@ export const createRoom = (title, votes_to_skip, guest_can_pause,onSuccess, onFa
                 type: actionTypes.roomActions.CREATE_ROOM_SUCCESS,
                 payload: res.data
             });
-            console.log(res);
-            // TODO: dispatch success message and show the snackbar message.
-            onSuccess && onSuccess(res);
+            onSuccess && onSuccess(res.data);
         } catch (err) {
             dispatch({
                 type: actionTypes.roomActions.CREATE_ROOM_FAIL
             });
-            onFailure && onFailure(err);
+            onFailure && onFailure(err.data);
             // TODO: dispatch Fail message and show the snackbar message.
         }
     } else {

@@ -22,7 +22,9 @@ const authActions = {
 
 const alertActions = {
     SHOW_ERROR: 'SHOW_ERROR',
-    HIDE_ERROR: 'HIDE_ERROR'
+    HIDE_ERROR: 'HIDE_ERROR',
+    SHOW_SUCCESS: 'SHOW_SUCCESS',
+    HIDE_SUCCESS: 'HIDE_SUCCESS'
 }
 
 const roomActions = {
