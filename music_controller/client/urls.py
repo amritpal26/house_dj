@@ -28,7 +28,7 @@ urlpatterns = [
 
     # Rooms
     path('create-room', index, name='index'),
-    path('join_room', index, name='index'),
+    path('join-room', index, name='index'),
     path('room/<str:roomCode>', index, name='index'),
 
     # social login auth redirect

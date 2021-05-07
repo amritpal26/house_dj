@@ -43,3 +43,45 @@ export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onF
         // TODO: dispatch Fail message and show the snackbar message.
     }
 };
+
+export const joinRoom = (room_code, onSuccess, onFailure) => async dispatch => {
+    if (!roomCode) {
+        onFailure && onFailure('Please fill all the details.');
+        return;
+    }
+    
+    if (localStorage.getItem('accessToken')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        // TODO: 
+        // const body = JSON.stringify({ roomCode });
+
+        // try {
+        //     const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_CREATE_ROOM}`, body, config);
+
+        //     dispatch({
+        //         type: actionTypes.roomActions.CREATE_ROOM_SUCCESS,
+        //         payload: res.data
+        //     });
+        //     onSuccess && onSuccess(res.data);
+        // } catch (err) {
+        //     dispatch({
+        //         type: actionTypes.roomActions.CREATE_ROOM_FAIL
+        //     });
+        //     onFailure && onFailure(err.data);
+        //     // TODO: dispatch Fail message and show the snackbar message.
+        // }
+    } else {
+        // dispatch({
+        //     type: actionTypes.roomActions.CREATE_ROOM_FAIL
+        // });
+        // onFailure && onFailure('User session expired');
+        // TODO: dispatch Fail message and show the snackbar message.
+    }
+};

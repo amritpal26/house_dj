@@ -35,7 +35,7 @@ const Layout = ({ error, success, checkAuthenticated, loadUser, hideError, hideS
     let history = useHistory();
 
     const handleClose = (type) => {
-        if (type === 'error') {
+        if (type == 'error') {
             hideError();
         } else {
             hideSuccess();

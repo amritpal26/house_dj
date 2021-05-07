@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Room from './components/Room';
-import JoinRoom from './components/JoinRoom';
 import { Provider } from 'react-redux';
 
 import theme from './theme';
@@ -22,6 +21,7 @@ import Activate from './containers/Activate';
 // Party containers
 import Home from './containers/Home';
 import EditRoom from './containers/EditRoom';
+import JoinRoom from './containers/JoinRoom';
 
 export default function App() {
     return (
@@ -42,9 +42,9 @@ export default function App() {
                                     <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
                                     <Route path='/create-room' component={ EditRoom }></Route>
                                     <Route path="/edit-room/:roomCode" component={ EditRoom }></Route>
-                                    <Route path="/room/:roomCode" component={ Room }></Route>
                                     <Route path="/join-room" component={ JoinRoom }></Route>
                                     <Route exact path="/" component={ Home }></Route>
+                                    <Route path="/room/:roomCode" component={ Room }></Route>
                                 </Switch>
                             </Layout>
                         </div>

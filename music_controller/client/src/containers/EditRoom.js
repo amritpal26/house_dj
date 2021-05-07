@@ -131,9 +131,8 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                     <Typography component='h1' variant='h4'>
                         Create A Room
                     </Typography>
-                    <Divider></Divider>
 
-                    {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%' }} />}
+                    {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
                     <ValidatorForm
                         className={classes.form}
                         onSubmit={onCreateRoom}>
