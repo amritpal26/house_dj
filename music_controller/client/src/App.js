@@ -40,7 +40,8 @@ export default function App() {
                                     <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
                                     <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
-                                    <Route path="/create-room" component={ EditRoom }></Route>
+                                    <Route path='/create-room' component={ EditRoom }></Route>
+                                    <Route path="/edit-room/:roomCode" component={ EditRoom }></Route>
                                     <Route path="/room/:roomCode" component={ Room }></Route>
                                     <Route path="/join-room" component={ JoinRoom }></Route>
                                     <Route exact path="/" component={ Home }></Route>

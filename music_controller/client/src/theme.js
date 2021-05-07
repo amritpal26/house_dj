@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { purple, green, blue, white } from '@material-ui/core/colors';
+import { purple, green, blue } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
     palette: {
@@ -12,10 +12,10 @@ const theme = createMuiTheme({
     },
     typography: {
         h5: {
-            color: white
+            color: '#fff'
         },
         h4: {
-            color: white
+            color: '#000'
         }
     },
 });

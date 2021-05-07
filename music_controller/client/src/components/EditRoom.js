@@ -1,136 +1,199 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from "@material-ui/core/Card";
-import Divider from "@material-ui/core/Divider";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Box from "@material-ui/core/Box";
-
+import React, { useState, useEffect } from 'react';
 import Configs from "../configs";
+import { useHistory } from 'react-router';
+import { createRoom } from '../actions/room';
+import { connect } from 'react-redux';
+import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import {
+    makeStyles,
+    Box,
+    Card,
+    Divider,
+    Button,
+    CircularProgress,
+    Typography,
+    FormControl,
+    Switch,
+    FormControlLabel
+} from "@material-ui/core";
+
 
 const DEFAULT_VOTES_TO_SKIP = Configs.constants.DEFAULT_VOTES_TO_SKIP;
 const DEFAULT_GUEST_CAN_PAUSE = Configs.constants.DEFAULT_GUEST_CAN_PAUSE;
 
-const useStyles = makeStyles({
-    card: {
-        minWidth: 450,
-        maxWidth: 750,
-        padding: 40
+const useStyles = makeStyles((theme) => ({
+    box: {
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    divider: {
-        width: 10
+    card: {
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: '420px',
+        minHeight: '420px',
+        maxWidth: '720px',
+        maxHeight: '720px',
+        padding: theme.spacing(2),
+    },
+    paper: {
+        flex: '1 1 auto',
+        minHeight: '0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '80%',
+        height: '100%',
+        flexGrow: 1,
+    },
+    contentContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        flexGrow: 1,
+    },
+    buttonsContainer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: theme.spacing(1)
+    },
+    votesLabel: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: theme.spacing(2)
     }
-});
+}));
 
-export default function EditRoom(props) {
-    const [guestCanPause, setGuestCanPause] = useState(DEFAULT_GUEST_CAN_PAUSE);
-    const [votesToSkip, setVotesToSkip] = useState(DEFAULT_VOTES_TO_SKIP);
+const EditRoom = ({ createRoom }) => {
     const classes = useStyles();
+    const history = useHistory();
+    const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+    const [formData, setFormData] = useState({
+        roomName: '',
+        votesToSkip: DEFAULT_VOTES_TO_SKIP,
+        guestCanPause: DEFAULT_GUEST_CAN_PAUSE
+    });
 
-    const onGuestCanPauseChange = (e) => {
-        setGuestCanPause(e.target.checked);
-    };
+    useEffect(() => {
+        ValidatorForm.addValidationRule('isStrictPositive', (value) => {
+            return value > 0;
+        });
 
-    const onVotesToSkipChanged = (e) => {
-        setVotesToSkip(e.target.value);
-    };
+        return () => {
+            ValidatorForm.removeValidationRule('isStrictPositive');
+        }
+    });
+
+    const onGuestCanPauseChange = (e) => setFormData({
+        ...formData,
+        guestCanPause: e.target.checked
+    });
+
+    const onChange = (e) => setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+    });
 
     const onCancel = (e) => {
-        console.log('cancel room creation', e);
+        console.log('onCancel');
+        history.replace('/login');
     };
 
     const onCreateRoom = (e) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({
-                votes_to_skip: votesToSkip,
-                guest_can_pause: guestCanPause
-            }),
-        };
+        console.log('create Room: ', formData);
+        setIsCreatingRoom(true);
 
-        fetch('/api/create-room', requestOptions)
-            .then((response) => response.json())
-            .then((room) => {
-                console.log(room)
-                props.history.push('/room/' + room.code)
-            });
+        const onSuccess = (res) => {
+            setIsCreatingRoom(false);
+            console.log('room created', res);
+        }
+
+        const onFailure = (err) => {
+            setIsCreatingRoom(false);
+            console.log('Failed to create room: ', err);
+        }
+
+        createRoom(formData.roomName, formData.votesToSkip, formData.guestCanPause, onSuccess, onFailure);
     };
 
     return (
-        <Box
-            display="flex"
-            minHeight="100vh"
-            alignItems="center"
-            justifyContent="center">
-            <Card className={classes.card} elevation={4} variant="elevation">
-                <CardContent>
-                    <Grid container direction="column" spacing={1}>
+        <Box className={classes.box}>
+            <Card className={classes.card} >
+                <div className={classes.paper}>
+                    <Typography component='h1' variant='h4'>
+                        Create A Room
+                    </Typography>
+                    <Divider></Divider>
 
-                        <Grid item xs={12} align="center">
-                            <Typography component="h3" variant="h3">Create A Room</Typography>
-                        </Grid>
-
-                        <Grid item xs={12} align="center">
-                            <Divider></Divider>
-                        </Grid>
-                        <Grid item xs={12} align="center">
+                    {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%' }} />}
+                    <ValidatorForm
+                        className={classes.form}
+                        onSubmit={onCreateRoom}>
+                        <div className={classes.contentContainer}>
+                            <TextValidator
+                                fullWidth
+                                label='Room name'
+                                name='roomName'
+                                disabled={isCreatingRoom}
+                                onChange={onChange}
+                                value={formData.roomName}
+                                validators={['required']}
+                                errorMessages={['Name is required']}
+                                style={{ width: '100%' }}
+                            />
+                            <TextValidator
+                                type='number'
+                                label='Votes to skip'
+                                name='votesToSkip'
+                                disabled={isCreatingRoom}
+                                value={formData.votesToSkip}
+                                helperText='Votes required to skip a song'
+                                validators={['required', 'isStrictPositive']}
+                                errorMessages={['This field is required', 'Votes to skip should be greater than 0']}
+                                style={{ marginTop: '8px', width: '100%' }}
+                            />
                             <FormControl component="fieldset">
                                 <FormControlLabel
+                                    className={classes.votesLabel}
                                     control={
                                         <Switch color="primary"
-                                            defaultChecked={DEFAULT_GUEST_CAN_PAUSE} 
+                                            defaultChecked={DEFAULT_GUEST_CAN_PAUSE}
+                                            disabled={isCreatingRoom}
                                             onChange={onGuestCanPauseChange}
                                         />}
                                     label="Guest can pause/play music"
                                     labelPlacement="start"
-                                    />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} align="center">
-                            <FormControl>
-                                <TextField
-                                    defaultValue={DEFAULT_VOTES_TO_SKIP}
-                                    required={true}
-                                    size="small"
-                                    type="number"
-                                    onChange={onVotesToSkipChanged}
-                                    helperText="Votes required to skip a song"
-                                    inputProps={{
-                                        min: 1,
-                                        style: { textAlign: "center" }
-                                    }}
                                 />
                             </FormControl>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-                <CardActions>
-                    <Grid container justify="center" spacing={2}>
-                        <Grid item>
-                            <Button 
-                                size="small" 
-                                color="secondary" 
-                                variant="outlined" 
-                                onClick={onCancel}>Cancel</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button 
-                                size="small" 
-                                color="primary" 
-                                variant="outlined" 
-                                onClick={onCreateRoom}>Create</Button>
-                        </Grid>
-                    </Grid>
-                </CardActions>
+                        </div>
+                            
+                        <div className={classes.buttonsContainer}>
+                            <Button
+                                variant='outlined'
+                                disabled={isCreatingRoom}
+                                onClick={onCancel}
+                            >Cancel
+                        </Button>
+                            <Button
+                                variant='outlined'
+                                disabled={isCreatingRoom}
+                                type='submit'
+                            >Create
+                        </Button>
+                        </div>
+                    </ValidatorForm>
+                </div>
             </Card>
         </Box>
     );
 }
+
+export default connect(null, { createRoom })(EditRoom);

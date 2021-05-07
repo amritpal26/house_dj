@@ -26,8 +26,8 @@ const alertActions = {
 }
 
 const roomActions = {
-    CREATE_ROOM: 'CREATE_ROOM',
-    JOIN_ROOM: 'JOIN_ROOM',
+    CREATE_ROOM_SUCCESS: 'CREATE_ROOM_SUCCESS',
+    CREATE_ROOM_FAIL: 'CREATE_ROOM_FAIL',
     UPDATE_ROOMS_LIST: 'UPDATE_ROOMS_LIST',
 }
 
