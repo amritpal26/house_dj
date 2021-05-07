@@ -103,23 +103,21 @@ const EditRoom = ({ createRoom, showSuccess }) => {
         [e.target.name]: e.target.value
     });
 
-    const onCancel = (e) => {
-        console.log('onCancel');
-        history.replace('/login');
+    const onCancel = () => {
+        history.replace('/');
     };
 
     const onCreateRoom = (e) => {
-        console.log('create Room: ', formData);
         setIsCreatingRoom(true);
 
         const onSuccess = (res) => {
             setIsCreatingRoom(false);
             showSuccess('Room Created');
-            console.log('room created', res);
         }
 
         const onFailure = (err) => {
             setIsCreatingRoom(false);
+            // TODO: Check what error we get back from server and show the error message.
             console.log('Failed to create room: ', err);
         }
 

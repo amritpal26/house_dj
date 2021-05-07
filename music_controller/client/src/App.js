@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import EditRoom from './components/EditRoom';
 import Room from './components/Room';
 import JoinRoom from './components/JoinRoom';
 import { Provider } from 'react-redux';
@@ -22,6 +21,7 @@ import Activate from './containers/Activate';
 
 // Party containers
 import Home from './containers/Home';
+import EditRoom from './containers/EditRoom';
 
 export default function App() {
     return (

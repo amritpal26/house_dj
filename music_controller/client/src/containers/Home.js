@@ -84,7 +84,7 @@ const Home = ({ rooms }) => {
 }
 
 const mapStateToProps = state => ({
-    rooms: state.room.roomList
+    rooms: state.room.myRoomsList
 });
 
 export default connect(mapStateToProps, null)(Home);
