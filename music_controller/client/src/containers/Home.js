@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
     },
     paper: {
-        flex: ' 0 1 auto',
+        flex: '1 1 auto',
         minHeight: '0',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
     },
-    contentContainer: {
+    roomsListContainer: {
         display: 'flex',
         flex: '0 1 auto',
         minHeight: '0',
@@ -50,6 +50,18 @@ const Home = ({ rooms }) => {
     const classes = useStyles();
     const history = useHistory();
 
+    const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
+    const noRoomsMessage = (
+        <div style={{ textAlign: 'center', margin: 'auto' }}>
+            <Typography component='p' variant='h6'>
+                No Rooms available
+            </Typography>
+            <Typography component='p' variant='body1'>
+                You don't have any rooms linked to your account.<br />
+                Create a room or join a room
+            </Typography>
+        </div>
+    );
     return (
         <Box className={classes.box}>
             <Card className={classes.card} >
@@ -58,12 +70,13 @@ const Home = ({ rooms }) => {
                         Welcome to House DJ!
                     </Typography>
 
-                    <div className={classes.contentContainer}>
+                    {!isAnyRoom && noRoomsMessage}
+                    {isAnyRoom && <div className={classes.roomsListContainer}>
                         <RoomsList 
                             rooms={rooms} 
                             onRoomSelect={(room) => {console.log(room)}} 
                         />
-                    </div>
+                    </div>}
 
                     <div className={classes.buttonsContainer}>
                         <Button

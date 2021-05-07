@@ -56,22 +56,9 @@ const RoomsList = ({ rooms }) => {
     const deleteRoom = (room) => {
         console.log('delete room: ', room);
     }
-
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
-    const noRoomsMessage = (
-        <div style={{ textAlign: 'center', margin: 'auto' }}>
-            <Typography component='p' variant='h6'>
-                No Rooms available
-            </Typography>
-            <Typography component='p' variant='body1'>
-                You don't have any rooms linked to your account.<br />
-                Create a room or join a room
-            </Typography>
-        </div>
-    );
     return (
         <div className={classes.root}>
-            {!isAnyRoom && noRoomsMessage}
             {isAnyRoom && <List className={classes.list}>
                 {rooms.map((room) =>
                     <ListItemTwoActions
@@ -98,7 +85,6 @@ const RoomsList = ({ rooms }) => {
                     </ListItemTwoActions>,
                 )}
             </List>}
-
         </div>
     );
 };
