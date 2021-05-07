@@ -14,7 +14,7 @@ class UserCreateSerializer(UserCreateSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = ['id', 'name', 'session_key']
+        fields = ['id', 'first_name', 'last_name', 'session_key']
 
 
 class RoomSerializer(serializers.ModelSerializer):

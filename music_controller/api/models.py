@@ -71,7 +71,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
             return self.last_name
 
     def __unicode__(self):
-            return self.name
+            return self.email
 
 
 class Room(models.Model):
