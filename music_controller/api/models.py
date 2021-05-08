@@ -46,7 +46,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.CharField(max_length=255, unique=True, null=False)
     first_name = models.CharField(max_length=255, default="", null=False)
     last_name = models.CharField(max_length=255, default="", null=False)
-    session_key = models.CharField(max_length=255, default='', null=False)
 
     is_staff = models.BooleanField(default=False)           # a admin user; non super-user
     is_superuser = models.BooleanField(default=False)       # a superuser
