@@ -1,35 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Card, Button, Typography } from '@material-ui/core';
+import { Card, Button, Typography } from '@material-ui/core';
 import RoomsList from '../components/RoomsList';
 import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
-    box: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: '420px',
-        minHeight: '420px',
-        maxWidth: '720px',
-        maxHeight: '720px',
-        padding: theme.spacing(2),
-    },
-    paper: {
-        flex: '1 1 auto',
-        minHeight: '0',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     roomsListContainer: {
         display: 'flex',
         flex: '0 1 auto',
@@ -63,36 +40,34 @@ const Home = ({ rooms }) => {
         </div>
     );
     return (
-        <Box className={classes.box}>
-            <Card className={classes.card} >
-                <div className={classes.paper}>
-                    <Typography component='h1' variant='h4'>
-                        Welcome to House DJ!
+        <Card className='card center' >
+            <div className='paper'>
+                <Typography component='h1' variant='h4'>
+                    Welcome to House DJ!
                     </Typography>
 
-                    {!isAnyRoom && noRoomsMessage}
-                    {isAnyRoom && <div className={classes.roomsListContainer}>
-                        <RoomsList 
-                            rooms={rooms} 
-                            onRoomSelect={(room) => {console.log(room)}} 
-                        />
-                    </div>}
+                {!isAnyRoom && noRoomsMessage}
+                {isAnyRoom && <div className={classes.roomsListContainer}>
+                    <RoomsList
+                        rooms={rooms}
+                        onRoomSelect={(room) => { console.log(room) }}
+                    />
+                </div>}
 
-                    <div className={classes.buttonsContainer}>
-                        <Button
-                            variant='outlined'
-                            onClick= {() => history.push('/create-room')}
-                        >Create Room
+                <div className={classes.buttonsContainer}>
+                    <Button
+                        variant='outlined'
+                        onClick={() => history.push('/create-room')}
+                    >Create Room
                         </Button>
-                        <Button
-                            variant='outlined'
-                            onClick= {() => history.push('/join-room')}
-                        >Join A Room
+                    <Button
+                        variant='outlined'
+                        onClick={() => history.push('/join-room')}
+                    >Join A Room
                         </Button>
-                    </div>
                 </div>
-            </Card>
-        </Box>
+            </div>
+        </Card>
     );
 }
 

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Box, Card, Avatar, Typography } from '@material-ui/core';
+import { Card, Avatar, Typography } from '@material-ui/core';
 import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import { resetPassword } from '../actions/auth';
@@ -11,42 +11,33 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
-    box: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: '360px',
-        minHeight: '420px',
-        padding: theme.spacing(2),
-    },
-    paper: {
-        flex: '1 1 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: '#00b8d4'
     },
-    formContainer: {
-        marginTop: '50px',
-        width: '360px',
-        textAlign: 'center'
+    contentContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '80%',
+        height: '100%',
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     form: {
         width: '100%',
-        margin: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        flexGrow: 1,
     },
-    confirmButton: {
-        marginTop: theme.spacing(4)
-    }
+    buttonsContainer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: theme.spacing(1)
+    },
 }));
 
 const ResetPassword = ({ isAuthenticated, resetPassword }) => {
@@ -57,7 +48,7 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
     const [email, setEmail] = useState('');
 
     const onEmailChange = e => setEmail(e.target.value);
-    
+
     const onSuccess = () => {
         setEmailConfirmed(true);
     }
@@ -81,54 +72,54 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
     }
 
     return (
-        <Box className={classes.box}>
-            <Card className={classes.card} >
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component='h1' variant='h4'>
-                        Reset Password
+        <Card className='card center' >
+            <div className='paper'>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component='h1' variant='h4'>
+                    Reset Password
                     </Typography>
 
-                    {emailConfirmed && <div className={classes.formContainer}>
-                        <Typography component='p' variant='h6'>
-                            Email Confirmed
+                {emailConfirmed && <div className={classes.contentContainer}>
+                    <Typography component='p' variant='h6'>
+                        Email Confirmed
                         </Typography>
-                        <Typography component='p' variant='body1'>
-                            Please check your email to for a link to confirm password.
+                    <Typography component='p' variant='body1' style={{ textAlign: 'center' }}>
+                        Please check your email to for a link to confirm password.
                         </Typography>
-                    </div>}
+                </div>}
 
-                    {!emailConfirmed && <div className={classes.formContainer}>
-                        <ValidatorForm
-                            instantValidate={false}
-                            className={classes.form}
+                {!emailConfirmed && <ValidatorForm
+                    instantValidate={false}
+                    className={classes.contentContainer}
+                    autoComplete='none'
+                    onSubmit={onSubmit}>
+                    <div className={classes.form}>
+                        <TextValidator
+                            fullWidth
+                            name='email'
+                            variant='outlined'
+                            label='Email Address'
+                            margin='normal'
                             autoComplete='none'
-                            onSubmit={onSubmit}>
-                            <TextValidator
-                                fullWidth
-                                name='email'
-                                variant='outlined'
-                                label='Email Address'
-                                margin='normal'
-                                autoComplete='none'
-                                onChange={onEmailChange}
-                                value={email}
-                                validators={['required', 'isEmail']}
-                                errorMessages={['This field is required', 'Email is not valid']}
-                            />
-                            <LoadingButton
-                                fullWidth
-                                className={classes.confirmButton}
-                                isLoading={isLoading}
-                            >Confirm
+                            onChange={onEmailChange}
+                            value={email}
+                            disabled={isLoading}
+                            validators={['required', 'isEmail']}
+                            errorMessages={['This field is required', 'Email is not valid']}
+                        />
+                    </div>
+                    <div className={classes.buttonsContainer}>
+                        <LoadingButton
+                            fullWidth
+                            isLoading={isLoading}
+                        >Confirm
                             </LoadingButton>
-                        </ValidatorForm>
-                    </div>}
-                </div>
-            </Card>
-        </Box>
+                    </div>
+                </ValidatorForm>}
+            </div>
+        </Card>
     );
 };
 

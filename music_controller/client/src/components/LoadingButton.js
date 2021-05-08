@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
     wrapper: {
         margin: theme.spacing(1),
         position: 'relative',
+        width: '100%'
     },
     buttonProgress: {
         color: [500],

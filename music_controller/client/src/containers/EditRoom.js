@@ -5,47 +5,13 @@ import { createRoom } from '../actions/room';
 import { showSuccess } from '../actions/alert';
 import { connect } from 'react-redux';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import {
-    makeStyles,
-    Box,
-    Card,
-    Divider,
-    Button,
-    CircularProgress,
-    Typography,
-    FormControl,
-    Switch,
-    FormControlLabel
-} from "@material-ui/core";
+import { makeStyles, Card, Button, CircularProgress, Typography, FormControl, Switch, FormControlLabel } from "@material-ui/core";
 
 
 const DEFAULT_VOTES_TO_SKIP = Configs.constants.DEFAULT_VOTES_TO_SKIP;
 const DEFAULT_GUEST_CAN_PAUSE = Configs.constants.DEFAULT_GUEST_CAN_PAUSE;
 
 const useStyles = makeStyles((theme) => ({
-    box: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: '420px',
-        minHeight: '420px',
-        maxWidth: '720px',
-        maxHeight: '720px',
-        padding: theme.spacing(2),
-    },
-    paper: {
-        flex: '1 1 auto',
-        minHeight: '0',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     form: {
         display: 'flex',
         flexDirection: 'column',
@@ -125,73 +91,71 @@ const EditRoom = ({ createRoom, showSuccess }) => {
     };
 
     return (
-        <Box className={classes.box}>
-            <Card className={classes.card} >
-                <div className={classes.paper}>
-                    <Typography component='h1' variant='h4'>
-                        Create A Room
+        <Card className='card center' >
+            <div className='paper'>
+                <Typography component='h1' variant='h4'>
+                    Create A Room
                     </Typography>
 
-                    {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
-                    <ValidatorForm
-                        className={classes.form}
-                        onSubmit={onCreateRoom}>
-                        <div className={classes.contentContainer}>
-                            <TextValidator
-                                fullWidth
-                                label='Room name'
-                                name='roomName'
-                                disabled={isCreatingRoom}
-                                onChange={onChange}
-                                value={formData.roomName}
-                                validators={['required']}
-                                errorMessages={['Name is required']}
-                                style={{ width: '100%' }}
+                {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
+                <ValidatorForm
+                    className={classes.form}
+                    onSubmit={onCreateRoom}>
+                    <div className={classes.contentContainer}>
+                        <TextValidator
+                            fullWidth
+                            label='Room name'
+                            name='roomName'
+                            disabled={isCreatingRoom}
+                            onChange={onChange}
+                            value={formData.roomName}
+                            validators={['required']}
+                            errorMessages={['Name is required']}
+                            style={{ width: '100%' }}
+                        />
+                        <TextValidator
+                            type='number'
+                            label='Votes to skip'
+                            name='votesToSkip'
+                            disabled={isCreatingRoom}
+                            value={formData.votesToSkip}
+                            helperText='Votes required to skip a song'
+                            validators={['required', 'isStrictPositive']}
+                            errorMessages={['This field is required', 'Votes to skip should be greater than 0']}
+                            style={{ marginTop: '8px', width: '100%' }}
+                        />
+                        <FormControl component="fieldset">
+                            <FormControlLabel
+                                className={classes.votesLabel}
+                                control={
+                                    <Switch color="primary"
+                                        defaultChecked={DEFAULT_GUEST_CAN_PAUSE}
+                                        disabled={isCreatingRoom}
+                                        onChange={onGuestCanPauseChange}
+                                    />}
+                                label="Guest can pause/play music"
+                                labelPlacement="start"
                             />
-                            <TextValidator
-                                type='number'
-                                label='Votes to skip'
-                                name='votesToSkip'
-                                disabled={isCreatingRoom}
-                                value={formData.votesToSkip}
-                                helperText='Votes required to skip a song'
-                                validators={['required', 'isStrictPositive']}
-                                errorMessages={['This field is required', 'Votes to skip should be greater than 0']}
-                                style={{ marginTop: '8px', width: '100%' }}
-                            />
-                            <FormControl component="fieldset">
-                                <FormControlLabel
-                                    className={classes.votesLabel}
-                                    control={
-                                        <Switch color="primary"
-                                            defaultChecked={DEFAULT_GUEST_CAN_PAUSE}
-                                            disabled={isCreatingRoom}
-                                            onChange={onGuestCanPauseChange}
-                                        />}
-                                    label="Guest can pause/play music"
-                                    labelPlacement="start"
-                                />
-                            </FormControl>
-                        </div>
-                            
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant='outlined'
-                                disabled={isCreatingRoom}
-                                onClick={onCancel}
-                            >Cancel
+                        </FormControl>
+                    </div>
+
+                    <div className={classes.buttonsContainer}>
+                        <Button
+                            variant='outlined'
+                            disabled={isCreatingRoom}
+                            onClick={onCancel}
+                        >Cancel
                         </Button>
-                            <Button
-                                variant='outlined'
-                                disabled={isCreatingRoom}
-                                type='submit'
-                            >Create
+                        <Button
+                            variant='outlined'
+                            disabled={isCreatingRoom}
+                            type='submit'
+                        >Create
                         </Button>
-                        </div>
-                    </ValidatorForm>
-                </div>
-            </Card>
-        </Box>
+                    </div>
+                </ValidatorForm>
+            </div>
+        </Card>
     );
 }
 

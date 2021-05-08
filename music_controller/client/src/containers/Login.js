@@ -12,27 +12,6 @@ import axios from 'axios';
 import theme, { Colors } from '../theme';
 
 const useStyles = makeStyles(theme => ({
-    box: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    card: {
-        padding: theme.spacing(2),
-        minWidth: '360px'
-    },
-    paper: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifySelf: 'center'
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: '#00b8d4'
-    },
     form: {
         width: '100%',
         marginTop: theme.spacing(1)
@@ -107,72 +86,70 @@ const Login = ({ login, isAuthenticated }) => {
     }
 
     return (
-        <Box className={classes.box}>
-            <Card className={classes.card} >
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component='h1' variant='h4'>
-                        Sign in
+        <Card className='card center' >
+            <div className='paper'>
+                <Avatar className='card-avatar'>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component='h1' variant='h4'>
+                    Sign in
                     </Typography>
-                    <form className={classes.form} noValidate autoComplete='none' onSubmit={e => onSubmit(e)}>
-                        <TextField
-                            required
-                            fullWidth
-                            autoFocus
-                            name='email'
-                            variant='outlined'
-                            label='Email Address'
-                            margin='normal'
-                            autoComplete='none'
-                            onChange={onChange}
-                        />
-                        <TextField
-                            required
-                            fullWidth
-                            name='password'
-                            variant='outlined'
-                            margin='normal'
-                            label='Password'
-                            type='password'
-                            autoComplete='new-password'
-                            onChange={onChange}
-                        />
-                        <LoadingButton
-                            fullWidth
-                            className={classes.signInButton}
-                            isLoading={isLoading}
-                            onClick={onSubmit}
-                        >Sign In
+                <form className={classes.form} noValidate autoComplete='none' onSubmit={e => onSubmit(e)}>
+                    <TextField
+                        required
+                        fullWidth
+                        autoFocus
+                        name='email'
+                        variant='outlined'
+                        label='Email Address'
+                        margin='normal'
+                        autoComplete='none'
+                        onChange={onChange}
+                    />
+                    <TextField
+                        required
+                        fullWidth
+                        name='password'
+                        variant='outlined'
+                        margin='normal'
+                        label='Password'
+                        type='password'
+                        autoComplete='new-password'
+                        onChange={onChange}
+                    />
+                    <LoadingButton
+                        fullWidth
+                        className={classes.signInButton}
+                        isLoading={isLoading}
+                        onClick={onSubmit}
+                    >Sign In
                         </LoadingButton>
-                    </form>
-                    <TextLine text='OR' marginTop={theme.spacing(2)} />
-                    <FormControl fullWidth >
-                        <Button
-                            fullWidth
-                            variant='contained'
-                            className={classes.socialLoginButton}
-                            onClick={continueWithGoogle}
-                        >Sign in with google</Button>
-                        <Button
-                            fullWidth
-                            variant='contained'
-                            className={classes.socialLoginButton}
-                            onClick={continueWithFacebook}
-                        >Sign in with Facebook</Button>
-                    </FormControl>
-                    <div className={classes.links}>
-                        <Typography component='h1' variant='body2'>
-                            Don't have an account? <Link to='/signup'>Sign Up</Link>
-                        </Typography>
-                        <Typography component='h1' variant='body2'>
-                            Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
-                        </Typography>
-                    </div>
+                </form>
+                <TextLine text='OR' marginTop={theme.spacing(2)} />
+                <FormControl fullWidth >
+                    <Button
+                        fullWidth
+                        variant='contained'
+                        className={classes.socialLoginButton}
+                        onClick={continueWithGoogle}
+                    >Sign in with google</Button>
+                    <Button
+                        fullWidth
+                        variant='contained'
+                        className={classes.socialLoginButton}
+                        onClick={continueWithFacebook}
+                    >Sign in with Facebook</Button>
+                </FormControl>
+                <div className={classes.links}>
+                    <Typography component='h1' variant='body2'>
+                        Don't have an account? <Link to='/signup'>Sign Up</Link>
+                    </Typography>
+                    <Typography component='h1' variant='body2'>
+                        Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
+                    </Typography>
                 </div>
-            </Card>
-        </Box>
+            </div>
+        </Card>
     );
 };
 
