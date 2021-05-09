@@ -72,9 +72,9 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
             return self.email
 
-
 class Room(models.Model):
     code = models.CharField(max_length=20, default=generate_code, unique=True)
+    title = models.CharField(max_length=256, default="", null=False)
     host = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     guest_can_pause = models.BooleanField(null=False, default=False)
     votes_to_skip = models.IntegerField(null=False, default=1)
