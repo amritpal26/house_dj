@@ -32,7 +32,6 @@ class GetRoom(APIView):
         
         return Response('Code paramater not found in request', status=status.HTTP_400_BAD_REQUEST)
 
-
 class JoinRoom(APIView):
     lookup_url_kwarg = 'code'
 
@@ -56,7 +55,7 @@ class JoinRoom(APIView):
         
         return Response('Invalid data, code not found', status=status.HTTP_400_BAD_REQUEST) 
 
-class CreateRoomView(APIView):
+class CreateRoom(APIView):
     serializer_class = CreateRoomSerializer
 
     def post(self, request, format=None):
@@ -78,3 +77,31 @@ class CreateRoomView(APIView):
             return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LeaveRoom(APIView):
+    def post(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        code = request.data.get(self.lookup_url_kwarg)
+        if code != None:
+            query = Room.objects.filter(code=code)
+            if len(query) > 0:
+                room = query[0]
+                user = request.user
+
+                if not user.rooms.filter(code=code).exists():
+                    return Response('You are not hosting or a member of this group', status=status.HTTP_409_CONFLICT)
+
+                if user.hosted_rooms:
+                    # Need to decide what to do in this case.
+                    # Options:
+                    #   1. Send notification to other users and remove them as well.
+                    pass
+
+                Room.leave(user, room)
+                return Response('Room Left!', status=status.HTTP_200_OK)
+            return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
+        
+        return Response('Invalid data, code not found', status=status.HTTP_400_BAD_REQUEST) 
+        

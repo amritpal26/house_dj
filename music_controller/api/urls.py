@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import RoomView, GetRoom, CreateRoomView, JoinRoom
+from .views import RoomView, GetRoom, CreateRoom, JoinRoom, LeaveRoom
 
 urlpatterns = [
-    path('room', RoomView.as_view() , name='room'),
-    path('create-room', CreateRoomView.as_view() , name='create-room'),
-    path('get-room', GetRoom.as_view() , name='get-room'),
-    path('join-room', JoinRoom.as_view()),
+    path('room', RoomView.as_view(), name='room'),
+    path('get-room', GetRoom.as_view(), name='get-room'),
+    path('join-room', JoinRoom.as_view(), name='join-room'),
+    path('create-room', CreateRoom.as_view(), name='create-room'),
+    path('leave-room', LeaveRoom.as_view(), name='leave-room'),
 ]
