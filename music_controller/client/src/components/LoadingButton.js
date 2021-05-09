@@ -5,9 +5,12 @@ import { Button, CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
+        display: 'flex',
+        justifyContent: 'center',
         margin: theme.spacing(1),
         position: 'relative',
-        width: '100%'
+        width: '100%',
+
     },
     buttonProgress: {
         color: [500],

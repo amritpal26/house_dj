@@ -2,43 +2,37 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Card, Typography } from "@material-ui/core";
+import { Card, Typography } from "@material-ui/core";
 import { activate } from '../actions/auth';
+import { showSuccess, showError } from '../actions/alert';
 import LoadingButton from '../components/LoadingButton';
 
 const useStyles = makeStyles(theme => ({
-    box: {
-        display: "flex",
-        minHeight: "100vh",
-        alignItems: "center",
-        justifyContent: "center"
+    verifyButton: {
+        marginTop: theme.spacing(8)
     },
-    card: {
-        minHeight: "400px",
-        minWidth: "300px",
-        display: "flex",
-        flexDirection: "column",
-        padding: theme.spacing(2),
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    verifyButton : {
-        marginTop: theme.spacing(4)
+    contentContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        flexGrow: 1,
     },
 }));
 
-const Activate = ({ verify, match }) => {
+const Activate = ({ verify, showSuccess, showError, match }) => {
     const [isVerified, setIsVerified] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const classes = useStyles();
 
     const onSuccess = () => {
+        showSuccess('Account Verified');
         setIsVerified(true);
         setIsLoading(false);
     };
 
-    const onFailure = () => {
+    const onFailure = (err) => {
         // TODO: show error message on Failure.
+        showError(err);
         setIsVerified(false);
         setIsLoading(false);
     };
@@ -52,25 +46,33 @@ const Activate = ({ verify, match }) => {
     }
 
     if (isVerified) {
-        return (<Redirect to="/login"/>);
+        return (<Redirect to="/login" />);
     }
 
     return (
-        <Box className={classes.box}>
-            <Card className={classes.card} >
+        <Card className='card center' >
+            <div className='paper'>
+
                 <Typography component="h1" variant="h4">
-                    Click on verify to activate your account
+                    Welcome
                 </Typography>
-                <LoadingButton
-                    className={classes.verifyButton}
-                    onClick={verifyAccount}
-                    isLoading={isLoading}
-                >
-                    Verify
-                </LoadingButton>
-            </Card>
-        </Box>
+
+                <div className={classes.contentContainer}>
+                    <Typography component='p' variant='h6'>
+                        Click on verify to activate your account
+                    </Typography>
+
+                    <LoadingButton
+                        className={classes.verifyButton}
+                        onClick={verifyAccount}
+                        isLoading={isLoading}
+                    >Verify
+                    </LoadingButton>
+
+                </div>
+            </div>
+        </Card>
     );
 };
 
-export default connect(null, { verify: activate })(Activate);
+export default connect(null, { verify: activate, showSuccess, showError })(Activate);
