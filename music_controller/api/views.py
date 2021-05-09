@@ -27,11 +27,13 @@ class CreateRoomView(APIView):
         if serializer.is_valid():
             # extract data
             host = request.user
+            
+            title = serializer.data['title']
             votes_to_skip = serializer.data['votes_to_skip']
             guest_can_pause = serializer.data['guest_can_pause']  
 
             # Create and save room in db.
-            room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
+            room = Room(title=title, host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
             room.save()
             return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
             
