@@ -6,6 +6,7 @@ const URL_JOIN_ROOM = '/api/join-room';
 const URL_GET_ROOM = '/api/get-room';
 const URL_UPDATE_ROOM = '/api/update-room';
 const URL_LEAVE_ROOM = '/api/leave-room';
+const URL_GET_MY_ROOMS = '/api/get-my-rooms';
 
 export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onFailure) => async dispatch => {
     if (!title || !votes_to_skip || !guest_can_pause) {
@@ -220,3 +221,39 @@ export const updateRoom = (code, title, votes_to_skip, guest_can_pause, onSucces
         onFailure && onFailure('User session expired');
     }
 };
+
+export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
+    if (localStorage.getItem('accessToken')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_MY_ROOMS}`, config);
+
+            dispatch({
+                type: actionTypes.roomActions.GET_ROOM_SUCCESS,
+                payload: res.data
+            });
+
+            onSuccess && onSuccess(res.data);
+        } catch (err) {
+            // TODO: Parse the error code and return apt message to show to user.
+            dispatch({
+                type: actionTypes.roomActions.GET_ROOM_FAILURE
+            });
+
+            const errorMessage = (err.response && err.response.data) || 'Failed to get room';
+            onFailure && onFailure(errorMessage);
+        }
+    } else {
+        dispatch({
+            type: actionTypes.roomActions.GET_ROOM_FAILURE
+        });
+        onFailure && onFailure('User session expired');
+    }
+}

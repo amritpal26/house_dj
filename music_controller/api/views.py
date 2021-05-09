@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
 
-from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer, UserRoomsSerializer
 from .models import Room, UserAccount
 
 # Views.
@@ -21,13 +22,12 @@ class GetRoom(APIView):
 
         code = request.GET.get(self.lookup_url_kwarg)
         if code:
-
             queryset = Room.objects.filter(code=code)
             if not queryset.exists():
                 return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
 
-            room = room[0]
-            data = RoomSerializer(room).data
+            room = queryset[0]
+            data = self.serializer_class(room).data
             data['is_host'] = request.user.id == room.host.id
 
             return Response(data, status=status.HTTP_200_OK)
@@ -140,4 +140,19 @@ class UpdateRoom(APIView):
 
                 return Response(RoomSerializer.data(room), status=status.HTTP_200_OK)
 
-        return Response('Invalid data', status=status.HTTP_400_BAD_REQUEST) 
+        return Response('Invalid data', status=status.HTTP_400_BAD_REQUEST)
+
+class GetUserRooms(APIView):
+    serializer_class = UserRoomsSerializer
+
+    def get(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        rooms_set = request.user.rooms
+        data = self.serializer_class(rooms_set, 
+            many=True, 
+            context={'user_id': request.user.id}
+        ).data
+
+        return Response(data, status=status.HTTP_200_OK)

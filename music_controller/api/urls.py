@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import RoomView, GetRoom, CreateRoom, JoinRoom, LeaveRoom, UpdateRoom
+from .views import RoomView, GetRoom, CreateRoom, JoinRoom, LeaveRoom, UpdateRoom, GetUserRooms
 
 urlpatterns = [
     path('room', RoomView.as_view(), name='room'),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('create-room', CreateRoom.as_view(), name='create-room'),
     path('leave-room', LeaveRoom.as_view(), name='leave-room'),
     path('update-room', UpdateRoom.as_view(), name='leave-room'),
+    path('get-my-rooms', GetUserRooms.as_view(), name='get-my-rooms'),
 ]
