@@ -23,6 +23,6 @@ urlpatterns = [
     path('join-room', JoinRoom.as_view(), name='join-room'),
     path('create-room', CreateRoom.as_view(), name='create-room'),
     path('leave-room', LeaveRoom.as_view(), name='leave-room'),
-    path('update-room', UpdateRoom.as_view(), name='leave-room'),
+    path('update-room', UpdateRoom.as_view(), name='update-room'),
     path('get-my-rooms', GetUserRooms.as_view(), name='get-my-rooms'),
 ]

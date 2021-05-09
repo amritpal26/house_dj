@@ -20,7 +20,6 @@ export const hideSuccess = () => dispatch => {
 }
 
 export const showSuccess = (successMessage) => dispatch => {
-    console.log('show success called');
     dispatch({
         type: actionTypes.alertActions.SHOW_SUCCESS,
         payload: successMessage

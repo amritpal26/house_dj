@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Configs from "../configs";
-import { useHistory } from 'react-router';
-import { createRoom } from '../actions/room';
-import { showSuccess } from '../actions/alert';
+import { useHistory, useLocation, matchPath } from 'react-router';
+import { createRoom, getRoom, updateRoom } from '../actions/room';
+import { showSuccess, showError } from '../actions/alert';
 import { connect } from 'react-redux';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { makeStyles, Card, Button, CircularProgress, Typography, FormControl, Switch, FormControlLabel } from "@material-ui/core";
@@ -39,17 +39,41 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const EditRoom = ({ createRoom, showSuccess }) => {
+const EditRoom = ({ getRoom, updateRoom, showSuccess, showError }) => {
     const classes = useStyles();
     const history = useHistory();
-    const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+    const location = useLocation();
+    const [isEditRoom, setIsEditRoom] = useState(false);
+    const [isSavingRoom, setIsSavingRoom] = useState(false);
     const [formData, setFormData] = useState({
-        roomName: '',
+        title: '',
         votesToSkip: DEFAULT_VOTES_TO_SKIP,
         guestCanPause: DEFAULT_GUEST_CAN_PAUSE
     });
 
     useEffect(() => {
+        const onGetRoomSuccess = (room) => {
+            setFormData({
+                ...formData,
+                code: room.code,
+                title: room.title,
+                votesToSkip: room.votes_to_skip,
+                guestCanPause: room.guest_can_pause,
+            })
+        }
+
+        const onGetRoomFailure = (err) => {
+            showError(err);
+            history.goBack();
+        }
+
+        const editMatch = matchPath(location.pathname, '/edit-room/:code');
+        if (editMatch) {
+            const code = editMatch.params.code;
+            setIsEditRoom(true)
+            getRoom(code, onGetRoomSuccess, onGetRoomFailure);
+        }
+
         ValidatorForm.addValidationRule('isStrictPositive', (value) => {
             return value > 0;
         });
@@ -57,7 +81,7 @@ const EditRoom = ({ createRoom, showSuccess }) => {
         return () => {
             ValidatorForm.removeValidationRule('isStrictPositive');
         }
-    });
+    }, [location]);
 
     const onGuestCanPauseChange = (e) => setFormData({
         ...formData,
@@ -73,21 +97,25 @@ const EditRoom = ({ createRoom, showSuccess }) => {
         history.goBack();
     };
 
-    const onCreateRoom = (e) => {
-        setIsCreatingRoom(true);
-
+    const onSaveRoom = (e) => {
+        setIsSavingRoom(true);
+        
         const onSuccess = (res) => {
-            setIsCreatingRoom(false);
-            showSuccess('Room Created');
+            setIsSavingRoom(false);
+            showSuccess(isEditRoom ? 'Room Updated' : 'Room Created');
         }
 
         const onFailure = (err) => {
-            setIsCreatingRoom(false);
-            // TODO: Check what error we get back from server and show the error message.
-            console.log('Failed to create room: ', err);
+            setIsSavingRoom(false);
+            showError(err);
+            history.goBack();
         }
 
-        createRoom(formData.roomName, formData.votesToSkip, formData.guestCanPause, onSuccess, onFailure);
+        if (isEditRoom) {
+            updateRoom(formData.code, formData.title, formData.votesToSkip, formData.guestCanPause, onSuccess, onFailure);
+        } else {
+            createRoom(formData.title, formData.votesToSkip, formData.guestCanPause, onSuccess, onFailure);
+        }
     };
 
     return (
@@ -97,18 +125,18 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                     Create A Room
                     </Typography>
 
-                {isCreatingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
+                {isSavingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
                 <ValidatorForm
                     className={classes.form}
-                    onSubmit={onCreateRoom}>
+                    onSubmit={onSaveRoom}>
                     <div className={classes.contentContainer}>
                         <TextValidator
                             fullWidth
                             label='Room name'
-                            name='roomName'
-                            disabled={isCreatingRoom}
+                            name='title'
+                            disabled={isSavingRoom}
                             onChange={onChange}
-                            value={formData.roomName}
+                            value={formData.title}
                             validators={['required']}
                             errorMessages={['Name is required']}
                             style={{ width: '100%' }}
@@ -117,7 +145,7 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                             type='number'
                             label='Votes to skip'
                             name='votesToSkip'
-                            disabled={isCreatingRoom}
+                            disabled={isSavingRoom}
                             value={formData.votesToSkip}
                             onChange={onChange}
                             helperText='Votes required to skip a song'
@@ -131,7 +159,7 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                                 control={
                                     <Switch color="primary"
                                         defaultChecked={DEFAULT_GUEST_CAN_PAUSE}
-                                        disabled={isCreatingRoom}
+                                        disabled={isSavingRoom}
                                         onChange={onGuestCanPauseChange}
                                     />}
                                 label="Guest can pause/play music"
@@ -143,15 +171,15 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                     <div className={classes.buttonsContainer}>
                         <Button
                             variant='outlined'
-                            disabled={isCreatingRoom}
+                            disabled={isSavingRoom}
                             onClick={onCancel}
                         >Cancel
                         </Button>
                         <Button
                             variant='outlined'
-                            disabled={isCreatingRoom}
+                            disabled={isSavingRoom}
                             type='submit'
-                        >Create
+                        >{isEditRoom ? 'Update' : 'Create'}
                         </Button>
                     </div>
                 </ValidatorForm>
@@ -160,4 +188,8 @@ const EditRoom = ({ createRoom, showSuccess }) => {
     );
 }
 
-export default connect(null, { createRoom, showSuccess })(EditRoom);
+const mapStateToProps = state => ({
+    editRoom: state.room.editRoom
+});
+
+export default connect(mapStateToProps, { createRoom, getRoom, updateRoom, showSuccess, showError })(EditRoom);

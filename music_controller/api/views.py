@@ -124,20 +124,20 @@ class UpdateRoom(APIView):
             code = serializer.data.get('code')
 
             queryset = Room.objects.filter(code=code)
-            if not queryset.exists():
+            if not  queryset.exists():
                 return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
 
-                room = queryset[0]
-                user = request.user
-                if not user.hosted_rooms.filter(room).exists():
-                    return Response('You are not the host of this room', status=status.HTTP_403_FORBIDDEN)
+            room = queryset[0]
+            user = request.user
+            if not user.hosted_rooms.filter(code=room.code).exists():
+                return Response('You are not the host of this room', status=status.HTTP_403_FORBIDDEN)
 
-                room.title = title
-                room.votes_to_skip = votes_to_skip
-                room.guest_can_pause = guest_can_pause
-                rooom.save(update_fields=['title', 'votes_to_skip', 'guest_can_pause'])
+            room.title = title
+            room.votes_to_skip = votes_to_skip
+            room.guest_can_pause = guest_can_pause
+            room.save(update_fields=['title', 'votes_to_skip', 'guest_can_pause'])
 
-                return Response(RoomSerializer.data(room), status=status.HTTP_200_OK)
+            return Response(self.serializer_class(room).data, status=status.HTTP_200_OK)
 
         return Response('Invalid data', status=status.HTTP_400_BAD_REQUEST)
 

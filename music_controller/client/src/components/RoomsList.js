@@ -8,7 +8,6 @@ import {
 import {
     withStyles,
     makeStyles,
-    Typography,
     List,
     ListItem,
     ListItemAvatar,
@@ -37,7 +36,7 @@ const ListItemTwoActions = withStyles({
     }
 })(ListItem);
 
-const RoomsList = ({ rooms }) => {
+const RoomsList = ({ rooms, onRoomSelect, onRoomEdit, onRoomDelete }) => {
     const classes = useStyles();
 
     const getRoomDetails = (room) => {
@@ -46,16 +45,17 @@ const RoomsList = ({ rooms }) => {
     }
 
     const selectRoom = (room) => {
-        console.log('select room: ', room);
+        onRoomSelect && onRoomSelect(room);
     }
 
     const editRoom = (room) => {
-        console.log('edit room: ', room);
+        onRoomEdit && onRoomEdit(room);
     }
 
     const deleteRoom = (room) => {
-        console.log('delete room: ', room);
+        onRoomDelete && onRoomDelete(room);
     }
+
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
     return (
         <div className={classes.root}>
@@ -92,11 +92,15 @@ const RoomsList = ({ rooms }) => {
 RoomsList.propTypes = {
     rooms: PropTypes.array,
     onRoomSelect: PropTypes.func,
+    onRoomEdit: PropTypes.func,
+    onRoomDelete: PropTypes.func
 };
 
 RoomsList.defaultProps = {
     rooms: [],
-    onRoomSelect: null
+    onRoomSelect: null,
+    onRoomEdit: null,
+    onRoomDelete: null
 };
 
 export default RoomsList;

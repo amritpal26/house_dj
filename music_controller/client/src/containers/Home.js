@@ -32,6 +32,10 @@ const Home = ({ rooms, getMyRooms, showError }) => {
         getMyRooms(null, (err) => { showError(err) });
     }, []);
 
+    const editRoom = (room) => {
+        history.push(`/edit-room/${room.code}`);
+    }
+
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
     const noRoomsMessage = (
         <div style={{ textAlign: 'center', margin: 'auto' }}>
@@ -55,6 +59,7 @@ const Home = ({ rooms, getMyRooms, showError }) => {
                 {isAnyRoom && <div className={classes.roomsListContainer}>
                     <RoomsList
                         rooms={rooms}
+                        onRoomEdit={(room) => editRoom(room)}
                         onRoomSelect={(room) => { console.log(room) }}
                     />
                 </div>}

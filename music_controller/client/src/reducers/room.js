@@ -2,8 +2,7 @@ import actionTypes from '../actions/actionTypes';
 
 const initialState = {
     currentRoom: null,
-    myRoomsList: [
-    ]
+    myRoomsList: []
 };
 
 export default function(state = initialState, action) {
