@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import RoomView, CreateRoomView, JoinRoom
+from .views import RoomView, GetRoom, CreateRoomView, JoinRoom
 
 urlpatterns = [
     path('room', RoomView.as_view() , name='room'),
     path('create-room', CreateRoomView.as_view() , name='create-room'),
+    path('get-room', GetRoom.as_view() , name='get-room'),
     path('join-room', JoinRoom.as_view()),
 ]
