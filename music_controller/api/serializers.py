@@ -18,12 +18,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
+    def _is_host(self, obj):
+        user_id = self.context.get('user_id')
+        return user_id and obj.host.id == user_id
+
     host = UserSerializer(many=False, read_only=True)
+    is_host = serializers.SerializerMethodField('_is_host')
 
     class Meta:
         model = Room
         fields = ['id', 'code', 'title', 'host', 'guest_can_pause',
-                  'votes_to_skip', 'created_at']
+                  'votes_to_skip', 'created_at', 'is_host']
 
 
 class CreateRoomSerializer(serializers.ModelSerializer):

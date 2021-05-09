@@ -26,14 +26,15 @@ class GetRoom(APIView):
                 return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
 
             room = queryset[0]
-            data = self.serializer_class(room).data
-            data['is_host'] = request.user.id == room.host.id
+            data = self.serializer_class(room, context={'user_id': request.user.id}).data
+            # data['is_host'] = request.user.id == room.host.id
 
             return Response(data, status=status.HTTP_200_OK)
         
         return Response('Code paramater not found in request', status=status.HTTP_400_BAD_REQUEST)
 
 class JoinRoom(APIView):
+    serializer_class = RoomSerializer
     lookup_url_kwarg = 'code'
 
     def post(self, request, format=None):
@@ -54,7 +55,7 @@ class JoinRoom(APIView):
                 return Response('You cannot join the room you host', status=status.HTTP_409_CONFLICT)
 
             Room.join(user, room)
-            return Response('Room Joined!', status=status.HTTP_200_OK)
+            return Response(self.serializer_class(room).data, status=status.HTTP_200_OK)
         
         return Response('Invalid data, code not found', status=status.HTTP_400_BAD_REQUEST) 
 
@@ -124,7 +125,7 @@ class UpdateRoom(APIView):
             code = serializer.data.get('code')
 
             queryset = Room.objects.filter(code=code)
-            if not  queryset.exists():
+            if not queryset.exists():
                 return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
 
             room = queryset[0]
