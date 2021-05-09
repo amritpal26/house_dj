@@ -22,16 +22,17 @@ export default function(state = initialState, action) {
         case actionTypes.roomActions.UPDATE_ROOM_SUCCESS:
         case actionTypes.roomActions.GET_ROOM_SUCCESS:
             const idx = state.myRoomsList.findIndex((room) => room.id === payload.id);
-            (idx > -1) ? state.myRoomsList[idx] = payload : state.myRoomsList.push(payload);
+            const newRooms = [...state.myRoomsList];
+            (idx > -1) ? newRooms[idx] = payload : newRooms.push(payload);
             return {
                 ...state,
-                currentRoom: payload
+                myRoomsList: newRooms
             }
         case actionTypes.roomActions.GET_ROOM_LIST_SUCCESS:
             console.log(payload)
             return {
                 ...state,
-                myRoomsList: payload
+                myRoomsList: [...payload]
             }
         case actionTypes.roomActions.LEAVE_ROOM_SUCCESS:
             return {
