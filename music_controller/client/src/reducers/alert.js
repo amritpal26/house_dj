@@ -8,7 +8,6 @@ const initialState = {
 export default function(state = initialState, action) {
     const { type, payload } = action;
 
-    console.log(`dispatching '${type}'`, payload);
     switch(type) {
         case actionTypes.alertActions.HIDE_ERROR:
             return {

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Button, Typography } from '@material-ui/core';
 import RoomsList from '../components/RoomsList';
 import { useHistory } from 'react-router-dom';
-
+import { getMyRooms } from '../actions/room'
+import { showError } from '../actions/alert';
 
 const useStyles = makeStyles((theme) => ({
     roomsListContainer: {
@@ -23,9 +24,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Home = ({ rooms }) => {
+const Home = ({ rooms, getMyRooms, showError }) => {
     const classes = useStyles();
     const history = useHistory();
+
+    useEffect(() => {
+        getMyRooms(null, (err) => { showError(err) });
+    }, []);
 
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
     const noRoomsMessage = (
@@ -75,4 +80,4 @@ const mapStateToProps = state => ({
     rooms: state.room.myRoomsList
 });
 
-export default connect(mapStateToProps, null)(Home);
+export default connect(mapStateToProps, { getMyRooms, showError })(Home);

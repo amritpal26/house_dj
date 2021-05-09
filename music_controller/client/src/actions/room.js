@@ -8,8 +8,12 @@ const URL_UPDATE_ROOM = '/api/update-room';
 const URL_LEAVE_ROOM = '/api/leave-room';
 const URL_GET_MY_ROOMS = '/api/get-my-rooms';
 
+const isBoolean = (val) => {
+    return typeof val == 'boolean';
+}
+
 export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onFailure) => async dispatch => {
-    if (!title || !votes_to_skip || !guest_can_pause) {
+    if (!title || !votes_to_skip || !isBoolean(guest_can_pause)) {
         onFailure && onFailure('Please fill all the details.');
         return;
     }
@@ -182,7 +186,7 @@ export const leaveRoom = (code, onSuccess, onFailure) => async dispatch => {
 };
 
 export const updateRoom = (code, title, votes_to_skip, guest_can_pause, onSuccess, onFailure) => async dispatch => {
-    if (!code || !title || !votes_to_skip || !guest_can_pause) {
+    if (!code || !title || !votes_to_skip || !isBoolean(guest_can_pause)) {
         onFailure && onFailure('Please fill all the details.');
         return;
     }
@@ -236,15 +240,14 @@ export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_MY_ROOMS}`, config);
 
             dispatch({
-                type: actionTypes.roomActions.GET_ROOM_SUCCESS,
+                type: actionTypes.roomActions.GET_ROOM_LIST_SUCCESS,
                 payload: res.data
             });
 
             onSuccess && onSuccess(res.data);
         } catch (err) {
-            // TODO: Parse the error code and return apt message to show to user.
             dispatch({
-                type: actionTypes.roomActions.GET_ROOM_FAILURE
+                type: actionTypes.roomActions.GET_ROOM_LIST_FAILURE
             });
 
             const errorMessage = (err.response && err.response.data) || 'Failed to get room';
@@ -252,7 +255,7 @@ export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
         }
     } else {
         dispatch({
-            type: actionTypes.roomActions.GET_ROOM_FAILURE
+            type: actionTypes.roomActions.GET_ROOM_LIST_FAILURE
         });
         onFailure && onFailure('User session expired');
     }
