@@ -58,7 +58,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     @property
     def member_rooms(self):
-        return u.members.all()
+        return self.members.all()
 
     @property
     def hosted_rooms(self):
@@ -66,7 +66,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     @property
     def rooms(self):
-        return self.member_rooms() | self.hosted_rooms()
+        return self.member_rooms | self.hosted_rooms
 
     @property 
     def full_name(self):

@@ -72,11 +72,12 @@ export const joinRoom = (code, onSuccess, onFailure) => async dispatch => {
             });
             onSuccess && onSuccess(res.data);
         } catch (err) {
-            // TODO: parse error code.
             dispatch({
                 type: actionTypes.roomActions.JOIN_ROOM_FAILURE
             });
-            onFailure && onFailure(err.data);
+
+            const errorMessage = (err.response && err.response.data) || 'Failed to join room';
+            onFailure && onFailure(errorMessage);
         }
     } else {
         dispatch({

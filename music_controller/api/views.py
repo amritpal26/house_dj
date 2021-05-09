@@ -44,24 +44,17 @@ class JoinRoom(APIView):
         if code != None:
             query = Room.objects.filter(code=code)
             if len(query) > 0:
+                room = query[0]
                 user = request.user
 
-                # --------------------------------------------------------
-                #TODO: Find already joined room and remove from that room
-                joined_room_query = user.members.all()
-                print(joined_room_query)
-                # --------------------------------------------------------
+                if user.hosted_rooms.filter(code=code).exists():
+                    return Response('You cannot join the room you host', status=status.HTTP_409_CONFLICT)
 
-
-                room = query[0]
-                room.join(user)
+                Room.join(user, room)
                 return Response('Room Joined!', status=status.HTTP_200_OK)
             return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
         
         return Response('Invalid data, code not found', status=status.HTTP_400_BAD_REQUEST) 
-
-
-
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer

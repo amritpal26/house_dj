@@ -47,14 +47,12 @@ const JoinRoom = ({ joinRoom, showSuccess, showError }) => {
 
         const onSuccess = () => {
             setIsJoiningRoom(false);
-            showSuccess('Joining Room');
+            showSuccess('Room Joined!');
             // TODO: navigate to the room page with code;
         }
 
         const onFailure = (err) => {
             setIsJoiningRoom(false);
-            // TODO: Check what error we get back from server and show the error message.
-            console.log(`Could not find room with code - ${roomCode}`, err);
             showError(err);
         }
 
