@@ -57,11 +57,19 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     @property
+    def member_rooms(self):
+        return u.members.all()
+
+    @property
+    def hosted_rooms(self):
+        return self.room_set.all()
+
+    @property
     def rooms(self):
-        return Room.objects.filter(host=self)
+        return self.member_rooms() | self.hosted_rooms()
 
     @property 
-    def get_full_name(self):
+    def full_name(self):
         if self.first_name and self.last_name:
             return self.first_name + ' ' + self.last_name
         elif self.first_name:
@@ -79,3 +87,12 @@ class Room(models.Model):
     guest_can_pause = models.BooleanField(null=False, default=False)
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    members = models.ManyToManyField(UserAccount, blank=True, related_name="members")
+
+    @classmethod
+    def join(cls, user, join_room):
+        join_room.members.add(user)
+
+    @classmethod
+    def leave(cls, user, leave_room):
+        leave_room.members.remove(user)
