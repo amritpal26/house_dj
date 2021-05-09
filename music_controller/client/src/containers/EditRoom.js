@@ -119,6 +119,7 @@ const EditRoom = ({ createRoom, showSuccess }) => {
                             name='votesToSkip'
                             disabled={isCreatingRoom}
                             value={formData.votesToSkip}
+                            onChange={onChange}
                             helperText='Votes required to skip a song'
                             validators={['required', 'isStrictPositive']}
                             errorMessages={['This field is required', 'Votes to skip should be greater than 0']}
