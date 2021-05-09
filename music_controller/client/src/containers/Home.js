@@ -33,7 +33,11 @@ const Home = ({ rooms, getMyRooms, showError }) => {
     }, []);
 
     const editRoom = (room) => {
-        history.push(`/edit-room/${room.code}`);
+        if (room.is_host) {
+            history.push(`/edit-room/${room.code}`);
+        } else {
+            showError('Only the host can edit room details');
+        }
     }
 
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
