@@ -27,7 +27,6 @@ class GetRoom(APIView):
 
             room = queryset[0]
             data = self.serializer_class(room, context={'user_id': request.user.id}).data
-            # data['is_host'] = request.user.id == room.host.id
 
             return Response(data, status=status.HTTP_200_OK)
         
