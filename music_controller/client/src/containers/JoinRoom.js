@@ -39,7 +39,7 @@ const JoinRoom = ({ joinRoom, showSuccess, showError }) => {
     const onCodeChange = (e) => setRoomCode(e.target.value);
 
     const onCancel = () => {
-        history.replace('/');
+        history.goBack();
     };
 
     const onJoinRoom = (e) => {

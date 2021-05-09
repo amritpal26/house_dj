@@ -70,7 +70,7 @@ const EditRoom = ({ createRoom, showSuccess }) => {
     });
 
     const onCancel = () => {
-        history.replace('/');
+        history.goBack();
     };
 
     const onCreateRoom = (e) => {
