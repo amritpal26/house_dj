@@ -93,7 +93,7 @@ class LeaveRoom(APIView):
                 room = queryset[0]
                 user = request.user
 
-                if not user.rooms.filter(code=code).exists():
+                if not user.all_rooms.filter(code=code).exists():
                     return Response('You are not hosting or a member of this group', status=status.HTTP_409_CONFLICT)
 
                 if user.hosted_room:
@@ -148,7 +148,7 @@ class GetUserRooms(APIView):
         if not request.user or not request.user.is_authenticated:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        rooms_set = request.user.rooms
+        rooms_set = request.user.all_rooms
         data = self.serializer_class(rooms_set, 
             many=True, 
             context={'user_id': request.user.id}
