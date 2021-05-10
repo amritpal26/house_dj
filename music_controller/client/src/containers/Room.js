@@ -45,7 +45,7 @@ const Room = ({ isSpotifyAuthenticated, requestSpotifyAuthorization, getRoom, sh
         } else if (!room) {
             getRoom(roomCode, true, onGetRoomSuccess, onGetRoomFailure);
         } 
-    }, [room]);
+    }, [isSpotifyAuthenticated, room]);
 
     if (isLoading) {
         return <PageLoader></PageLoader>
