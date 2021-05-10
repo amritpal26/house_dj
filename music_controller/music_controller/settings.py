@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Own
     'api.apps.ApiConfig',
     'client.apps.ClientConfig',
+    'spotify.apps.SpotifyConfig',
 ]
 
 MIDDLEWARE = [
