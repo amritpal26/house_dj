@@ -6,8 +6,8 @@ from .secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 
 
 def get_user_token_or_none(user):
-    token_set = SpotifyToken.objects.filter(user_pk=user.id)
-    return token_set.first() if token_set.exist() else None
+    token_set = SpotifyToken.objects.filter(user_id=user.id)
+    return token_set.first() if token_set.exists() else None
 
 
 def create_or_update_tokens(user, access_token, refresh_token, token_type, scope, expires_in):

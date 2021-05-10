@@ -64,7 +64,7 @@ const Home = ({ rooms, getMyRooms, showError }) => {
                     <RoomsList
                         rooms={rooms}
                         onRoomEdit={(room) => editRoom(room)}
-                        onRoomSelect={(room) => { console.log(room) }}
+                        onRoomSelect={(room) => history.push(`/room/${room.code}`)}
                     />
                 </div>}
 

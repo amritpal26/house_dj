@@ -71,7 +71,7 @@ const EditRoom = ({ getRoom, updateRoom, showSuccess, showError }) => {
         if (editMatch) {
             const code = editMatch.params.code;
             setIsEditRoom(true)
-            getRoom(code, onGetRoomSuccess, onGetRoomFailure);
+            getRoom(code, false, onGetRoomSuccess, onGetRoomFailure);
         }
 
         ValidatorForm.addValidationRule('isStrictPositive', (value) => {

@@ -4,7 +4,8 @@ const initialState = {
     accessToken: localStorage.getItem('access_token'),
     refreshToken: localStorage.getItem('refresh_token'),
     isAuthenticated: null,
-    user: null
+    user: null,
+    isSpotifyAuthenticated: false,
 };
 
 export default function(state = initialState, action) {
@@ -66,6 +67,16 @@ export default function(state = initialState, action) {
         case actionTypes.authActions.ACTIVATION_FAIL:
             return {
                 ...state
+            }
+        case actionTypes.authActions.SPOTIFY_AUTH_SUCCESS:
+            return {
+                ...state,
+                isSpotifyAuthenticated: true
+            }
+        case actionTypes.authActions.SPOTIFY_AUTH_FAIL:
+            return {
+                ...state,
+                isSpotifyAuthenticated: false
             }
         default:
             return state

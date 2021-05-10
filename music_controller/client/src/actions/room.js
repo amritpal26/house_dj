@@ -8,6 +8,9 @@ const URL_UPDATE_ROOM = '/api/update-room';
 const URL_LEAVE_ROOM = '/api/leave-room';
 const URL_GET_MY_ROOMS = '/api/get-my-rooms';
 
+const URL_IS_SPOTIFY_AUTHENTICATED = '/spotify/is-authenticated'
+const URL_GET_SPOTIFY_AUTH_URL = '/spotify/get-auth-url';
+
 const isBoolean = (val) => {
     return typeof val == 'boolean';
 }
@@ -94,7 +97,7 @@ export const joinRoom = (code, onSuccess, onFailure) => async dispatch => {
     }
 };
 
-export const getRoom = (code, onSuccess, onFailure) => async dispatch => {
+export const getRoom = (code, isJoinedRoom, onSuccess, onFailure) => async dispatch => {
     if (!code) {
         onFailure && onFailure('Please fill all the details.');
         return;
@@ -122,6 +125,12 @@ export const getRoom = (code, onSuccess, onFailure) => async dispatch => {
                 type: actionTypes.roomActions.GET_ROOM_SUCCESS,
                 payload: res.data
             });
+            if (isJoinedRoom) {
+                dispatch({
+                    type: actionTypes.roomActions.SET_JOINED_ROOM,
+                    payload: res.data
+                });
+            }
             onSuccess && onSuccess(res.data);
         } catch (err) {
             // TODO: Parse the error code and return apt message to show to user.
@@ -260,3 +269,6 @@ export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
         onFailure && onFailure('User session expired');
     }
 }
+
+
+

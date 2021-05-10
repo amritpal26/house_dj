@@ -11,6 +11,10 @@ const URL_USER_ACTIVATION = '/auth/users/activation/';
 const URL_PASSWORD_RESET = '/auth/users/reset_password/';
 const URL_PASSWORD_RESET_CONFIRM = '/auth/users/reset_password_confirm/';
 
+const URL_IS_SPOTIFY_AUTHENTICATED = '/spotify/is-authenticated'
+const URL_GET_SPOTIFY_AUTH_URL = '/spotify/get-auth-url';           // redirects
+const URL_AUTHENTICATE_SPOTIFY = '/spotify/authenticate'
+
 export const loadUser = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
 
@@ -281,4 +285,86 @@ export const logout = (onSuccess) => async dispatch => {
     });
 
     onSuccess && onSuccess();
+};
+
+// ----------------------------------------------------
+// Spotify authentication
+// ----------------------------------------------------
+const checkSpotifyAuth = async () => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_IS_SPOTIFY_AUTHENTICATED}`, config);
+        return res.data.status;
+    } catch (err) {
+        return false;
+    }
+}
+
+export const requestSpotifyAuthorization = (onSuccess, onFailure) => async dispatch => {
+    try {
+        const isAuthenticated = await checkSpotifyAuth();
+
+        if (isAuthenticated) {
+            onSuccess && onSuccess('User Authenticated');
+            dispatch({
+                type: actionTypes.authActions.SPOTIFY_AUTH_SUCCESS,
+            });
+        } else {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                    'Accept': 'application/json'
+                }
+            };
+
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_SPOTIFY_AUTH_URL}`, config);
+            
+            const redirect_url = res.data.auth_url;
+            window.location.replace(redirect_url)
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.authActions.SPOTIFY_AUTH_FAIL
+        });
+        onFailure && onFailure('Could not authenticate user');
+    }
+};
+
+export const spotifyAuthenticate = (code, onSuccess, onFailure) => async dispatch => {
+    if (code && localStorage.getItem('accessToken')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        const body = JSON.stringify({ code });
+
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_AUTHENTICATE_SPOTIFY}`, body, config);
+            
+            dispatch({
+                type: actionTypes.authActions.SPOTIFY_AUTH_SUCCESS,
+                payload: res.data
+            });
+            onSuccess && onSuccess();
+        } catch (err) {
+            dispatch({
+                type: actionTypes.authActions.SPOTIFY_AUTH_FAIL
+            });
+            onFailure && onFailure(err);
+        }
+    } else {
+        onFailure && onFailure('User not authenticated');
+    }
 };

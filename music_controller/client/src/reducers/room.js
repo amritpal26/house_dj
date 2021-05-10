@@ -2,6 +2,7 @@ import actionTypes from '../actions/actionTypes';
 
 const initialState = {
     currentRoom: null,
+    joinedRoom: null,
     myRoomsList: []
 };
 
@@ -27,6 +28,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 myRoomsList: newRooms
+            }
+        case actionTypes.roomActions.SET_JOINED_ROOM:
+            return {
+                ...state,
+                joinedRoom: payload
             }
         case actionTypes.roomActions.GET_ROOM_LIST_SUCCESS:
             console.log(payload)

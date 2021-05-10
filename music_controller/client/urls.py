@@ -37,4 +37,5 @@ urlpatterns = [
     # social login auth redirect
     path('google', index, name='index'),
     path('facebook', index, name='index'),
+    path('spotify', index, name='index'),
 ]
