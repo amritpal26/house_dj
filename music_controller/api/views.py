@@ -50,7 +50,7 @@ class JoinRoom(APIView):
             room = queryset[0]
             user = request.user
 
-            if user.hosted_rooms.filter(code=code).exists():
+            if user.hosted_room.filter(code=code).exists():
                 return Response('You cannot join the room you host', status=status.HTTP_409_CONFLICT)
 
             Room.join(user, room)
@@ -96,7 +96,7 @@ class LeaveRoom(APIView):
                 if not user.rooms.filter(code=code).exists():
                     return Response('You are not hosting or a member of this group', status=status.HTTP_409_CONFLICT)
 
-                if user.hosted_rooms:
+                if user.hosted_room:
                     # Need to decide what to do in this case.
                     # Options:
                     #   1. Send notification to other users and remove them as well.
@@ -129,7 +129,7 @@ class UpdateRoom(APIView):
 
             room = queryset[0]
             user = request.user
-            if not user.hosted_rooms.filter(code=room.code).exists():
+            if not user.hosted_room.filter(code=room.code).exists():
                 return Response('You are not the host of this room', status=status.HTTP_403_FORBIDDEN)
 
             room.title = title

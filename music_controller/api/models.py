@@ -61,12 +61,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return self.members.all()
 
     @property
-    def hosted_rooms(self):
-        return self.room_set.all()
+    def hosted_room(self):
+        return self.room_set.first()
 
     @property
-    def rooms(self):
-        return self.member_rooms | self.hosted_rooms
+    def all_rooms(self):
+        return self.members.all() | self.room_set.all()
 
     @property 
     def full_name(self):
