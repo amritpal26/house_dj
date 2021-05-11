@@ -14,6 +14,16 @@ const isBoolean = (val) => {
     return typeof val == 'boolean';
 }
 
+const getJwtHeader = () => {
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+            'Accept': 'application/json'
+        }
+    };
+};
+
 export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onFailure) => async dispatch => {
     if (!title || !votes_to_skip || !isBoolean(guest_can_pause)) {
         onFailure && onFailure('Please fill all the details.');
@@ -21,13 +31,7 @@ export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onF
     }
     
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         const body = JSON.stringify({ title, votes_to_skip, guest_can_pause });
 
@@ -62,13 +66,7 @@ export const joinRoom = (code, onSuccess, onFailure) => async dispatch => {
     }
     
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         const body = JSON.stringify({ code });
 
@@ -103,13 +101,7 @@ export const getRoom = (code, isJoinedRoom, onSuccess, onFailure) => async dispa
     }
 
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         const details = {
             'code': code
@@ -155,13 +147,7 @@ export const leaveRoom = (code, onSuccess, onFailure) => async dispatch => {
     }
 
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         const details = {
             'code': code
@@ -200,13 +186,7 @@ export const updateRoom = (code, title, votes_to_skip, guest_can_pause, onSucces
     }
 
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         const body = JSON.stringify({ code, title, votes_to_skip, guest_can_pause });
 
@@ -236,13 +216,7 @@ export const updateRoom = (code, title, votes_to_skip, guest_can_pause, onSucces
 
 export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_MY_ROOMS}`, config);
@@ -275,13 +249,7 @@ export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
 // ----------------------------------------------------
 export const currentlyPlaying = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-                'Accept': 'application/json'
-            }
-        };
+        const config = getJwtHeader();
 
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_CURRENTLY_PLAYING}`, config);
