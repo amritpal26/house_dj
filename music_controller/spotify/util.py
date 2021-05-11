@@ -37,7 +37,7 @@ def is_user_spotify_authenticated(user):
         if token.expires_at > timezone.now():
             return True
         else:
-            return refresh_spotify_token(user,token) != None
+            return refresh_spotify_token(user,token)
 
     return False
 
@@ -59,7 +59,7 @@ def refresh_spotify_token(user, old_token):
 
     create_or_update_tokens(
         user, access_token, refresh_token, token_type, scope, expires_in)
-    return access_token
+    return True
 
 def is_token_expired(token):
     return token.expires_at < (timezone.now() + timedelta(seconds=1))
@@ -71,6 +71,7 @@ def execute_spotify_request(user, endpoint, post_=False, put_=False):
     
     if is_token_expired(token):
         refresh_spotify_token(user, token)
+        token = get_user_token_or_none(user)
     
     headers = {'Content-Type': 'application/json',
                'Authorization': '{0} {1}'.format(token.token_type, token.access_token)}
