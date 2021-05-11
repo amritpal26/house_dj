@@ -48,7 +48,7 @@ const JoinRoom = ({ joinRoom, showSuccess, showError }) => {
         const onSuccess = () => {
             setIsJoiningRoom(false);
             showSuccess('Room Joined!');
-            // TODO: navigate to the room page with code;
+            history.replace(`/room/${roomCode}`)
         }
 
         const onFailure = (err) => {
