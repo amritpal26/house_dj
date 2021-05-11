@@ -83,7 +83,7 @@ def execute_spotify_request(user, endpoint, post_=False, put_=False):
         put(base_url + endpoint, headers=headers)
 
     response = get(base_url + endpoint, {}, headers=headers)
-    print('original res: ', response)
+ 
     try:
         return response.json()
     except:

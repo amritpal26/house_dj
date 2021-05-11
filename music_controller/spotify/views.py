@@ -6,7 +6,7 @@ from requests import Request, post
 from .secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from .util import *
 from .models import Vote
-
+from api.models import Room
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -109,3 +109,61 @@ class CurrentlyPlaying(APIView):
             room.current_song_id = song_id
             room.save(update_fields=['current_song_id'])
             votes = Vote.objects.filter(room=room).delete()
+
+class PlaySong(APIView):
+    def put(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+        
+        room_code = request.data.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if not room:
+            return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
+
+        user = request.user
+        is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
+        if is_request_from_host or len(votes)+1 > room.votes_to_skip:
+            play_song(user)
+            return Response('Success', status=status.HTTP_200_OK)
+
+        return Response('Failure', status=status.HTTP_403_FORBIDDEN)
+
+class PauseSong(APIView):
+    def put(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+        
+        room_code = request.data.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if not room:
+            return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
+
+        user = request.user
+        is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
+        if is_request_from_host or len(votes)+1 > room.votes_to_skip:
+            pause_song(user)
+            return Response('Success', status=status.HTTP_200_OK)
+        
+        return Response('Failure', status=status.HTTP_403_FORBIDDEN)
+
+class SkipSong(APIView):
+    def post(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+        
+        room_code = request.data.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if not room:
+            return Response('Room not found', status=status.HTTP_404_NOT_FOUND) 
+
+        votes = Vote.objects.filter(room=room)
+        user = request.user
+        is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
+        if is_request_from_host or len(votes)+1 > room.votes_to_skip:
+            skip_song()
+            votes.delete()
+        else:
+            vote = Vote(user=user, room=room, song_id=room.current_song)
+            vote.save()
+
+        return Response('Success', status=status.HTTP_200_OK)
