@@ -5,6 +5,7 @@ from rest_framework import status
 from requests import Request, post
 from .secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from .util import *
+from .models import Vote
 
 
 class AuthURL(APIView):
@@ -29,7 +30,6 @@ class AuthenticateSpotify(APIView):
     def post(self, request, format=None):
         if not request.user or not request.user.is_authenticated:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
-
 
         if 'code' not in request.data:
             return Response('Invalid data: Missing "code"', status=status.HTTP_400_BAD_REQUEST)
@@ -63,3 +63,49 @@ class IsAuthenticated(APIView):
     def get(self, request, format=None):
         is_authenticated = is_user_spotify_authenticated(request.user)
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
+
+
+class CurrentlyPlaying(APIView):
+    def get(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        host = request.user
+        room = host.hosted_room
+        if not room:
+            return Response('User does not host any room', status=status.HTTP_404_NOT_FOUND)
+        
+        response = execute_spotify_request(host, 'player/currently-playing')
+        # if 'error' in response or 'item' not in response:
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        item = response.get('item')
+        duration = item.get('duration_ms')
+        progress = response.get('progress_ms')
+        album_cover = item.get('album').get('images')[0].get('url')
+        is_playing = response.get('is_playing')
+        song_id = item.get('id')
+        artist_string = ', '.join([artist.get('name') for artist in item.get('artists')])
+
+        votes = len(Vote.objects.filter(room_id=room.id, song_id=song_id))
+        song = {
+            'title': item.get('name'),
+            'artist': artist_string,
+            'duration': duration,
+            'time': progress,
+            'image_url': album_cover,
+            'is_playing': is_playing,
+            'votes': votes,
+            'votes_required': room.votes_to_skip,
+            'id': song_id
+        }
+
+
+        self.update_room_song(room, song_id)
+        return Response(song, status=status.HTTP_200_OK)
+
+    def update_room_song(self, room, song_id):
+        if room.current_song_id != song_id:
+            room.current_song_id = song_id
+            room.save(update_fields=['current_song_id'])
+            votes = Vote.objects.filter(room=room).delete()

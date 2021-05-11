@@ -8,8 +8,7 @@ const URL_UPDATE_ROOM = '/api/update-room';
 const URL_LEAVE_ROOM = '/api/leave-room';
 const URL_GET_MY_ROOMS = '/api/get-my-rooms';
 
-const URL_IS_SPOTIFY_AUTHENTICATED = '/spotify/is-authenticated'
-const URL_GET_SPOTIFY_AUTH_URL = '/spotify/get-auth-url';
+const URL_GET_CURRENTLY_PLAYING = '/spotify/currently-playing';
 
 const isBoolean = (val) => {
     return typeof val == 'boolean';
@@ -271,4 +270,38 @@ export const getMyRooms = (onSuccess, onFailure) => async dispatch => {
 }
 
 
+// ----------------------------------------------------
+// Spotify
+// ----------------------------------------------------
+export const currentlyPlaying = (onSuccess, onFailure) => async dispatch => {
+    if (localStorage.getItem('accessToken')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
+        };
 
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_GET_CURRENTLY_PLAYING}`, config);
+
+            dispatch({
+                type: actionTypes.roomActions.GET_CURRENTLY_PLAYING_SUCCESS,
+                payload: res.data
+            });
+            onSuccess && onSuccess(res.data);
+        } catch (err) {
+            dispatch({
+                type: actionTypes.roomActions.GET_CURRENTLY_PLAYING_FAIL
+            });
+            const errorMessage = (err.response && err.response.data) || 'Failed to get current song';
+            onFailure && onFailure(errorMessage);
+        }
+    } else {
+        dispatch({
+            type: actionTypes.roomActions.GET_CURRENTLY_PLAYING_FAIL
+        });
+        onFailure && onFailure('User session expired');
+    }
+}

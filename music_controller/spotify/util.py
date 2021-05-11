@@ -1,7 +1,7 @@
 from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
-from requests import post
+from requests import post, put, get
 from .secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 
 
@@ -37,7 +37,7 @@ def is_user_spotify_authenticated(user):
         if token.expires_at > timezone.now():
             return True
         else:
-            return refresh_spotify_token(user,token)
+            return refresh_spotify_token(user,token) != None
 
     return False
 
@@ -52,9 +52,6 @@ def refresh_spotify_token(user, old_token):
         'client_secret': CLIENT_SECRET
     }).json()
 
-    if response.status_code == 400:
-        return False 
-
     access_token = response.get('access_token')
     token_type = response.get('token_type')
     scope = response.get('scope')
@@ -62,4 +59,43 @@ def refresh_spotify_token(user, old_token):
 
     create_or_update_tokens(
         user, access_token, refresh_token, token_type, scope, expires_in)
-    return True
+    return access_token
+
+def is_token_expired(token):
+    return token.expires_at < (timezone.now() + timedelta(seconds=1))
+
+def execute_spotify_request(user, endpoint, post_=False, put_=False):
+    token = get_user_token_or_none(user)
+    if not token:
+        return {'Error': 'User not a host'}
+    
+    if is_token_expired(token):
+        refresh_spotify_token(user, token)
+    
+    headers = {'Content-Type': 'application/json',
+               'Authorization': '{0} {1}'.format(token.token_type, token.access_token)}
+
+    base_url = "https://api.spotify.com/v1/me/"
+    if post_:
+        post(base_url + endpoint, headers=headers)
+    if put_:
+        put(base_url + endpoint, headers=headers)
+
+    response = get(base_url + endpoint, {}, headers=headers)
+    print('original res: ', response)
+    try:
+        return response.json()
+    except:
+        return {'Error': 'Request failed'}
+
+
+def play_song(user):
+    return execute_spotify_request(user, "player/play", put_=True)
+
+
+def pause_song(user):
+    return execute_spotify_request(user, "player/pause", put_=True)
+
+
+def skip_song(user):
+    return execute_spotify_request(user, "player/next", post_=True)

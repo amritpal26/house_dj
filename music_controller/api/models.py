@@ -88,6 +88,7 @@ class Room(models.Model):
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(UserAccount, blank=True, related_name="members")
+    current_song_id = models.CharField(max_length=50, null=True)
 
     @classmethod
     def join(cls, user, join_room):
