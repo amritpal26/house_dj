@@ -50,7 +50,7 @@ class JoinRoom(APIView):
             room = queryset[0]
             user = request.user
 
-            if user.hosted_room.filter(code=code).exists():
+            if user.hosted_room and user.hosted_room.code == code:
                 return Response('You cannot join the room you host', status=status.HTTP_409_CONFLICT)
 
             Room.join(user, room)

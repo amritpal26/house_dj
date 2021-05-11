@@ -70,14 +70,14 @@ class CurrentlyPlaying(APIView):
         if not request.user or not request.user.is_authenticated:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        host = request.user
-        room = host.hosted_room
+        user = request.user
+        room = user.all_rooms.first()
         if not room:
-            return Response('User does not host any room', status=status.HTTP_404_NOT_FOUND)
+            return Response('Join a room first', status=status.HTTP_404_NOT_FOUND)
         
-        response = execute_spotify_request(host, 'player/currently-playing')
-        # if 'error' in response or 'item' not in response:
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
+        response = execute_spotify_request(room.host, 'player/currently-playing')
+        if 'error' in response or 'item' not in response:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         item = response.get('item')
         duration = item.get('duration_ms')
@@ -156,14 +156,18 @@ class SkipSong(APIView):
         if not room:
             return Response('Room not found', status=status.HTTP_404_NOT_FOUND) 
 
-        votes = Vote.objects.filter(room=room)
         user = request.user
+        votes = Vote.objects.filter(room=room)
+        user_already_voted = votes.filter(user=user).exists()
+        if user_already_voted:
+            return Response('Already voted', status=status.HTTP_403_FORBIDDEN)
+            
         is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
         if is_request_from_host or len(votes)+1 > room.votes_to_skip:
-            skip_song()
+            skip_song(user)
             votes.delete()
         else:
-            vote = Vote(user=user, room=room, song_id=room.current_song)
+            vote = Vote(user=user, room=room, song_id=room.current_song_id)
             vote.save()
 
         return Response('Success', status=status.HTTP_200_OK)
