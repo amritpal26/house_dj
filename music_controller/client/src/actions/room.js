@@ -9,6 +9,9 @@ const URL_LEAVE_ROOM = '/api/leave-room';
 const URL_GET_MY_ROOMS = '/api/get-my-rooms';
 
 const URL_GET_CURRENTLY_PLAYING = '/spotify/currently-playing';
+const URL_SPOTIFY_PLAY = '/spotify/play';
+const URL_SPOTIFY_PAUSE = '/spotify/pause';
+const URL_SPOTIFY_SKIP = '/spotify/skip';
 
 const isBoolean = (val) => {
     return typeof val == 'boolean';
@@ -272,4 +275,88 @@ export const currentlyPlaying = (onSuccess, onFailure) => async dispatch => {
         });
         onFailure && onFailure('User session expired');
     }
+};
+
+export const playSong = (room_code, onSuccess, onFailure) => async dispatch => {
+    if (localStorage.getItem('accessToken')) {
+        const config = getJwtHeader();
+
+        const body = JSON.stringify({ room_code });
+        try {
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}${URL_SPOTIFY_PLAY}`, body, config);
+
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_PLAY_SUCCESS,
+                payload: res.data
+            });
+            onSuccess && onSuccess(res.data);
+        } catch (err) {
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_PLAY_FAIL
+            });
+            const errorMessage = (err.response && err.response.data) || 'Failed to play song';
+            onFailure && onFailure(errorMessage);
+        }
+    } else {
+        dispatch({
+            type: actionTypes.roomActions.SPOTIFY_PLAY_FAIL
+        });
+        onFailure && onFailure('User session expired');
+    }
+};
+
+export const pauseSong = (room_code, onSuccess, onFailure) => async dispatch => {
+    if (localStorage.getItem('accessToken')) {
+        const config = getJwtHeader();
+
+        const body = JSON.stringify({ room_code });
+        try {
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}${URL_SPOTIFY_PAUSE}`, body, config);
+
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_PAUSE_SUCCESS,
+                payload: res.data
+            });
+            onSuccess && onSuccess(res.data);
+        } catch (err) {
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_PAUSE_FAIL
+            });
+            const errorMessage = (err.response && err.response.data) || 'Failed to pause song';
+            onFailure && onFailure(errorMessage);
+        }
+    } else {
+        dispatch({
+            type: actionTypes.roomActions.SPOTIFY_PAUSE_FAIL
+        });
+        onFailure && onFailure('User session expired');
+    }
 }
+
+export const skipSong = (room_code, onSuccess, onFailure) => async dispatch => {
+    if (localStorage.getItem('accessToken')) {
+        const config = getJwtHeader();
+
+        const body = JSON.stringify({ room_code });
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_SPOTIFY_SKIP}`, body, config);
+
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_SKIP_SUCCESS,
+                payload: res.data
+            });
+            onSuccess && onSuccess(res.data);
+        } catch (err) {
+            dispatch({
+                type: actionTypes.roomActions.SPOTIFY_SKIP_FAIL
+            });
+            const errorMessage = (err.response && err.response.data) || '';
+            onFailure && onFailure(errorMessage);
+        }
+    } else {
+        dispatch({
+            type: actionTypes.roomActions.SPOTIFY_SKIP_FAIL
+        });
+        onFailure && onFailure('User session expired');
+    }
+};
