@@ -116,7 +116,7 @@ class PlaySong(APIView):
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
         
         room_code = request.data.get('room_code')
-        room = Room.objects.filter(code=room_code)
+        room = Room.objects.filter(code=room_code).first()
         if not room:
             return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
 
@@ -134,7 +134,7 @@ class PauseSong(APIView):
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
         
         room_code = request.data.get('room_code')
-        room = Room.objects.filter(code=room_code)
+        room = Room.objects.filter(code=room_code).first()  
         if not room:
             return Response('Room not found', status=status.HTTP_404_NOT_FOUND)
 
@@ -152,7 +152,7 @@ class SkipSong(APIView):
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
         
         room_code = request.data.get('room_code')
-        room = Room.objects.filter(code=room_code)
+        room = Room.objects.filter(code=room_code).first()
         if not room:
             return Response('Room not found', status=status.HTTP_404_NOT_FOUND) 
 
