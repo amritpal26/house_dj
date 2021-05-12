@@ -41,7 +41,7 @@ class UpdateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ( 'code', 'title', 'votes_to_skip', 'guest_can_pause')
+        fields = ( 'id', 'code', 'title', 'votes_to_skip', 'guest_can_pause')
 
 class UserRoomsSerializer(serializers.ModelSerializer):
     def _is_host(self, obj):
