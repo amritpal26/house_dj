@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     roomsListContainer: {
         display: 'flex',
         flex: '0 1 auto',
+        flexGrow: 1,
         minHeight: '0',
         width: '100%',
         justifyContent: 'center',

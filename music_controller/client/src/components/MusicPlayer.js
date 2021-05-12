@@ -11,7 +11,7 @@ const MusicPlayer = (props) => {
     const progress = props.duration ? (props.time / props.duration) * 100 : 0;
 
     return (
-        <Card>
+        <Card elevation={10}>
             <Grid container alignItems='center'>
                 <Grid item align='center' xs={4}>
                     <img src={props.image_url} height='100%' width='100%' />
