@@ -45,7 +45,7 @@ export const createRoom = (title, votes_to_skip, guest_can_pause, onSuccess, onF
                 type: actionTypes.roomActions.CREATE_ROOM_SUCCESS,
                 payload: res.data
             });
-            onSuccess && onSuccess(res.data);
+            onSuccess && onSuccess('Room created!');
         } catch (err) {
             dispatch({
                 type: actionTypes.roomActions.CREATE_ROOM_FAILURE
@@ -152,17 +152,13 @@ export const leaveRoom = (code, onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
         const config = getJwtHeader();
 
-        const details = {
-            'code': code
-        }
-
-        const params = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+        const body = JSON.stringify({ code });
 
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}${URL_LEAVE_ROOM}?${params}`, config);
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_LEAVE_ROOM}`, body, config);
 
             dispatch({
-                type: actionTypes.roomActions.LEAVE_ROOM_FAILURE,
+                type: actionTypes.roomActions.LEAVE_ROOM_SUCCESS,
                 payload: res.data
             });
             onSuccess && onSuccess(res.data);
@@ -171,7 +167,7 @@ export const leaveRoom = (code, onSuccess, onFailure) => async dispatch => {
                 type: actionTypes.roomActions.LEAVE_ROOM_FAILURE
             });
 
-            const errorMessage = (err.response && err.response.data) || 'Failed to get room';
+            const errorMessage = (err.response && err.response.data) || 'Failed to leave room';
             onFailure && onFailure(errorMessage);
         }
     } else {
@@ -200,7 +196,7 @@ export const updateRoom = (code, title, votes_to_skip, guest_can_pause, onSucces
                 type: actionTypes.roomActions.UPDATE_ROOM_SUCCESS,
                 payload: res.data
             });
-            onSuccess && onSuccess(res.data);
+            onSuccess && onSuccess('Room updated!');
         } catch (err) {
             dispatch({
                 type: actionTypes.roomActions.UPDATE_ROOM_FAILURE
