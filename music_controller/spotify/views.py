@@ -122,11 +122,11 @@ class PlaySong(APIView):
 
         user = request.user
         is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
-        if is_request_from_host or len(votes)+1 > room.votes_to_skip:
-            play_song(user)
+        if is_request_from_host or room.guest_can_pause:
+            play_song(room.host)
             return Response('Success', status=status.HTTP_200_OK)
 
-        return Response('Failure', status=status.HTTP_403_FORBIDDEN)
+        return Response('Only host can play', status=status.HTTP_403_FORBIDDEN)
 
 class PauseSong(APIView):
     def put(self, request, format=None):
@@ -140,11 +140,11 @@ class PauseSong(APIView):
 
         user = request.user
         is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
-        if is_request_from_host or len(votes)+1 > room.votes_to_skip:
-            pause_song(user)
+        if is_request_from_host or room.guest_can_pause:
+            pause_song(room.host)
             return Response('Success', status=status.HTTP_200_OK)
         
-        return Response('Failure', status=status.HTTP_403_FORBIDDEN)
+        return Response('Only host can pause', status=status.HTTP_403_FORBIDDEN)
 
 class SkipSong(APIView):
     def post(self, request, format=None):
@@ -161,7 +161,7 @@ class SkipSong(APIView):
         user_already_voted = votes.filter(user=user).exists()
         if user_already_voted:
             return Response('Already voted', status=status.HTTP_403_FORBIDDEN)
-            
+
         is_request_from_host = user.hosted_room and user.hosted_room.id == room.id
         if is_request_from_host or len(votes)+1 > room.votes_to_skip:
             skip_song(user)
