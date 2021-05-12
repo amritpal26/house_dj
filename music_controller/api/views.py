@@ -86,24 +86,21 @@ class LeaveRoom(APIView):
         if not request.user or not request.user.is_authenticated:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        code = request.data.get(self.lookup_url_kwarg)
+        code = request.data.get('code')
         if code != None:
             queryset = Room.objects.filter(code=code)
-            if not queryset.exists():
-                room = queryset[0]
+            if queryset.exists:
+                room = queryset.first()
                 user = request.user
 
                 if not user.all_rooms.filter(code=code).exists():
                     return Response('You are not hosting or a member of this group', status=status.HTTP_409_CONFLICT)
 
-                if user.hosted_room:
-                    # Need to decide what to do in this case.
-                    # Options:
-                    #   1. Send notification to other users and remove them as well.
-                    #   2. Delete the room as well OR keep the room under the host.
-                    pass
+                if user.hosted_room.id == room.id:
+                    room.delete()
+                else:
+                    Room.leave(user, room)
 
-                Room.leave(user, room)
                 return Response('Room Left!', status=status.HTTP_200_OK)
             return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
         
@@ -129,7 +126,7 @@ class UpdateRoom(APIView):
 
             room = queryset[0]
             user = request.user
-            if not user.hosted_room.filter(code=room.code).exists():
+            if not user.hosted_room:
                 return Response('You are not the host of this room', status=status.HTTP_403_FORBIDDEN)
 
             room.title = title
