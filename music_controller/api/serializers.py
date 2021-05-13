@@ -11,12 +11,23 @@ class UserCreateSerializer(UserCreateSerializer):
 
 #-----------------------------------------------------
 
+
+#-------------------------------------------------
+#---------------------- User ---------------------
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ['id', 'email', 'first_name', 'last_name']
 
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ['id', 'first_name', 'last_name']
+#-------------------------------------------------
 
+
+#-------------------------------------------------
+#---------------------- Room ---------------------
 class RoomSerializer(serializers.ModelSerializer):
     def _is_host(self, obj):
         user_id = self.context.get('user_id')
@@ -43,7 +54,6 @@ class GetRoomSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'host', 'members', 'guest_can_pause',
                   'votes_to_skip', 'created_at', 'is_host']
 
-
 class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
@@ -66,3 +76,4 @@ class UserRoomsSerializer(serializers.ModelSerializer):
         model = Room
         fields = ['id', 'code', 'is_host', 'title', 'guest_can_pause',
                   'votes_to_skip', 'created_at']
+#---------------------- Room ---------------------

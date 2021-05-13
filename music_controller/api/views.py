@@ -154,3 +154,27 @@ class GetUserRooms(APIView):
         ).data
 
         return Response(data, status=status.HTTP_200_OK)
+
+class UpdateUserProfile(APIView):
+    serializer_class = UpdateProfileSerializer
+
+    def post(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid() or 'id' not in request.data:
+            user_id = request.data['id']
+            first_name = serializer.data['first_name']
+            last_name = serializer.data['last_name']
+
+            user = request.user
+            if user_id != user.id:
+                return Response('You can only change your own profile', status=status.HTTP_403_FORBIDDEN)
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save(update_fields=['first_name', 'last_name'])
+            
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        return Response('Invalid data', status=status.HTTP_400_BAD_REQUEST)
