@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {
     Album as AlbumIcon,
-    Delete as DeleteIcon,
+    ExitToApp as ExitToAppIcon,
     Edit as EditIcon
 } from '@material-ui/icons';
 import {
@@ -36,7 +36,7 @@ const ListItemTwoActions = withStyles({
     }
 })(ListItem);
 
-const RoomsList = ({ rooms, onRoomSelect, onRoomEdit, onRoomDelete }) => {
+const RoomsList = ({ rooms, onRoomSelect, onRoomEdit, onRoomLeave }) => {
     const classes = useStyles();
 
     const getRoomDetails = (room) => {
@@ -52,14 +52,13 @@ const RoomsList = ({ rooms, onRoomSelect, onRoomEdit, onRoomDelete }) => {
         onRoomEdit && onRoomEdit(room);
     }
 
-    const deleteRoom = (room) => {
-        onRoomDelete && onRoomDelete(room);
+    const leaveRoom = (room) => {
+        onRoomLeave && onRoomLeave(room);
     }
 
-    const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
     return (
         <div className={classes.root}>
-            {isAnyRoom && <List className={classes.list}>
+            <List className={classes.list}>
                 {rooms.map((room) =>
                     <ListItemTwoActions
                         key={room.id}
@@ -78,13 +77,13 @@ const RoomsList = ({ rooms, onRoomSelect, onRoomEdit, onRoomDelete }) => {
                             <IconButton edge="end" aria-label="delete" onClick={() => editRoom(room)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton edge="end" aria-label="delete" onClick={() => deleteRoom(room)}>
-                                <DeleteIcon />
+                            <IconButton edge="end" aria-label="delete" onClick={() => leaveRoom(room)}>
+                                <ExitToAppIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
                     </ListItemTwoActions>,
                 )}
-            </List>}
+            </List>
         </div>
     );
 };
@@ -93,14 +92,14 @@ RoomsList.propTypes = {
     rooms: PropTypes.array,
     onRoomSelect: PropTypes.func,
     onRoomEdit: PropTypes.func,
-    onRoomDelete: PropTypes.func
+    onRoomLeave: PropTypes.func
 };
 
 RoomsList.defaultProps = {
     rooms: [],
     onRoomSelect: null,
     onRoomEdit: null,
-    onRoomDelete: null
+    onRoomLeave: null
 };
 
 export default RoomsList;

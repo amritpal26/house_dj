@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const EditRoom = ({ getRoom, updateRoom, showSuccess, showError }) => {
+const EditRoom = ({ createRoom, getRoom, updateRoom, showSuccess, showError }) => {
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
@@ -102,7 +102,9 @@ const EditRoom = ({ getRoom, updateRoom, showSuccess, showError }) => {
         
         const onSuccess = (res) => {
             setIsSavingRoom(false);
-            showSuccess(isEditRoom ? 'Room Updated' : 'Room Created');
+            const message = res || (isEditRoom ? 'Room Updated' : 'Room Created');
+            showSuccess(message);
+            history.goBack();
         }
 
         const onFailure = (err) => {
@@ -122,7 +124,7 @@ const EditRoom = ({ getRoom, updateRoom, showSuccess, showError }) => {
         <Card className='card center' >
             <div className='paper'>
                 <Typography component='h1' variant='h4'>
-                    Create A Room
+                    {isEditRoom ? 'Update Room' : 'Create Room'}
                     </Typography>
 
                 {isSavingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}

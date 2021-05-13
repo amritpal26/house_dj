@@ -10,6 +10,9 @@ from api.models import Room
 
 class AuthURL(APIView):
     def get(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+            
         scopes = ' '.join([
             'user-read-playback-state',
             'user-read-currently-playing',
@@ -61,6 +64,9 @@ class AuthenticateSpotify(APIView):
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):
+        if not request.user or not request.user.is_authenticated:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
         is_authenticated = is_user_spotify_authenticated(request.user)
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
 

@@ -35,7 +35,6 @@ export default function(state = initialState, action) {
                 joinedRoom: payload
             }
         case actionTypes.roomActions.GET_ROOM_LIST_SUCCESS:
-            console.log(payload)
             return {
                 ...state,
                 myRoomsList: [...payload]
@@ -43,7 +42,8 @@ export default function(state = initialState, action) {
         case actionTypes.roomActions.LEAVE_ROOM_SUCCESS:
             return {
                 ...state,
-                currentRoom: null
+                currentRoom: null,
+                myRoomsList: state.myRoomsList.filter((room) => room.code != payload)
             }
         case actionTypes.roomActions.CREATE_ROOM_FAILURE:
         case actionTypes.roomActions.JOIN_ROOM_FAILURE:

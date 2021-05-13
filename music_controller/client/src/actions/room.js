@@ -159,7 +159,7 @@ export const leaveRoom = (code, onSuccess, onFailure) => async dispatch => {
 
             dispatch({
                 type: actionTypes.roomActions.LEAVE_ROOM_SUCCESS,
-                payload: res.data
+                payload: code
             });
             onSuccess && onSuccess(res.data);
         } catch (err) {

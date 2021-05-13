@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { makeStyles, Card, Typography, Button } from "@material-ui/core";
 import PageLoader from '../components/PageLoader';
 import MusicPlayer from '../components/MusicPlayer';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const POLLING_INTERVAL_MS = 1500;
 const useStyles = makeStyles((theme) => ({
@@ -91,7 +90,7 @@ const Room = (props) => {
     return (
         <Card className='card center' >
             <div className='paper'>
-                <Typography component='h3' variant='h3' style={{flexGrow: 1}}>
+                <Typography component='h3' variant='h3'>
                     {room.title}
                 </Typography>
 

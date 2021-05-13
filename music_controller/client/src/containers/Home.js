@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, Button, Typography } from '@material-ui/core';
 import RoomsList from '../components/RoomsList';
 import { useHistory } from 'react-router-dom';
-import { getMyRooms } from '../actions/room'
-import { showError } from '../actions/alert';
+import { getMyRooms, leaveRoom } from '../actions/room'
+import { showSuccess, showError } from '../actions/alert';
 
 const useStyles = makeStyles((theme) => ({
     roomsListContainer: {
@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '0',
         width: '100%',
         justifyContent: 'center',
+        flexDirection: 'column',
     },
     buttonsContainer: {
         width: '100%',
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Home = ({ rooms, getMyRooms, showError }) => {
+const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -39,9 +40,43 @@ const Home = ({ rooms, getMyRooms, showError }) => {
         } else {
             showError('Only the host can edit room details');
         }
-    }
+    };
+
+    const onRoomLeaveSuccess = (msg) => {
+        showSuccess(msg || 'Left room');
+    };
+
+    const onRoomLeaveFailure = (err) => {
+        showError(err || 'Error occured while leaving room')
+    };
 
     const isAnyRoom = (rooms && typeof rooms === 'object' && rooms.length > 0);
+    const onCreateRoom = () => {
+        if (isAnyRoom) {
+            showError('Leave the current room to create a new room');
+        } else {
+            history.push('/create-room');
+        }
+    };
+
+    const onJoinRoom = () => {
+        if (isAnyRoom) {
+            showError('Leave the current room to join a new room');
+        } else {
+            history.push('/join-room');
+        }
+    };
+    
+    const sorted_rooms = [
+        { title: 'Hosted Rooms', rooms: rooms.filter((room) => room.is_host) },
+        { title: 'Member Rooms', rooms: rooms.filter((room) => !room.is_host) },
+    ]
+
+    const RoomsHeader = ({ title }) => (
+        <Typography component='h6' variant='h6'>
+            {title}
+        </Typography>
+    );
     const noRoomsMessage = (
         <div style={{ textAlign: 'center', margin: 'auto' }}>
             <Typography component='p' variant='h6'>
@@ -61,25 +96,29 @@ const Home = ({ rooms, getMyRooms, showError }) => {
                     </Typography>
 
                 {!isAnyRoom && noRoomsMessage}
-                {isAnyRoom && <div className={classes.roomsListContainer}>
-                    <RoomsList
-                        rooms={rooms}
-                        onRoomEdit={(room) => editRoom(room)}
-                        onRoomSelect={(room) => history.push(`/room/${room.code}`)}
-                    />
-                </div>}
+                {sorted_rooms.map(type => {
+                    return (type.rooms.length > 0 && <div className={classes.roomsListContainer} key={type.title}>
+                        <RoomsHeader title={type.title}/>
+                        <RoomsList
+                            rooms={type.rooms}
+                            onRoomEdit={(room) => editRoom(room)}
+                            onRoomSelect={(room) => history.push(`/room/${room.code}`)}
+                            onRoomLeave={(room) => leaveRoom(room.code, onRoomLeaveSuccess, onRoomLeaveFailure)}
+                        />
+                    </div>);
+                })}
 
                 <div className={classes.buttonsContainer}>
                     <Button
                         variant='outlined'
-                        onClick={() => history.push('/create-room')}
+                        onClick={onCreateRoom}
                     >Create Room
-                        </Button>
+                    </Button>
                     <Button
                         variant='outlined'
-                        onClick={() => history.push('/join-room')}
+                        onClick={onJoinRoom}
                     >Join A Room
-                        </Button>
+                    </Button>
                 </div>
             </div>
         </Card>
@@ -90,4 +129,4 @@ const mapStateToProps = state => ({
     rooms: state.room.myRoomsList
 });
 
-export default connect(mapStateToProps, { getMyRooms, showError })(Home);
+export default connect(mapStateToProps, { getMyRooms, leaveRoom, showSuccess, showError })(Home);
