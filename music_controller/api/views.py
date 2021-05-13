@@ -42,16 +42,17 @@ class JoinRoom(APIView):
 
         code = request.data.get(self.lookup_url_kwarg)
         if code != None:
+            user = request.user
             
             queryset = Room.objects.filter(code=code)
             if not queryset.exists():
                 return Response('Invalid Room Code', status=status.HTTP_404_NOT_FOUND)
 
             room = queryset[0]
-            user = request.user
-
             if user.hosted_room and user.hosted_room.code == code:
                 return Response('You cannot join the room you host', status=status.HTTP_409_CONFLICT)
+            if user.all_rooms.exists():
+                return Response('Leave the current room to create a new room', status=status.HTTP_403_FORBIDDEN)
 
             Room.join(user, room)
             return Response(self.serializer_class(room).data, status=status.HTTP_200_OK)
@@ -67,15 +68,16 @@ class CreateRoom(APIView):
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            # extract data
-            host = request.user
+            user = request.user
+
+            if user.all_rooms.exists():
+                return Response('Leave the current room to create a new room', status=status.HTTP_403_FORBIDDEN)
             
             title = serializer.data['title']
             votes_to_skip = serializer.data['votes_to_skip']
             guest_can_pause = serializer.data['guest_can_pause']  
 
-            # Create and save room in db.
-            room = Room(title=title, host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
+            room = Room(title=title, host=user, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
             room.save()
             return Response(GetRoomSerializer(room).data, status=status.HTTP_201_CREATED)
             
