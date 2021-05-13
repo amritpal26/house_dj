@@ -30,6 +30,19 @@ class RoomSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'host', 'guest_can_pause',
                   'votes_to_skip', 'created_at', 'is_host']
 
+class GetRoomSerializer(serializers.ModelSerializer):
+    def _is_host(self, obj):
+        user_id = self.context.get('user_id')
+        return user_id and obj.host.id == user_id
+
+    host = UserSerializer(many=False, read_only=True)
+    members = UserSerializer(many=True, read_only=True)
+    is_host = serializers.SerializerMethodField('_is_host')
+    class Meta:
+        model = Room
+        fields = ['id', 'code', 'title', 'host', 'members', 'guest_can_pause',
+                  'votes_to_skip', 'created_at', 'is_host']
+
 
 class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,7 +54,7 @@ class UpdateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ( 'id', 'code', 'title', 'votes_to_skip', 'guest_can_pause')
+        fields = ( 'code', 'title', 'votes_to_skip', 'guest_can_pause')
 
 class UserRoomsSerializer(serializers.ModelSerializer):
     def _is_host(self, obj):

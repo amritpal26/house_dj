@@ -3,7 +3,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer, UserRoomsSerializer
+from .serializers import *
 from .models import Room, UserAccount
 
 # Views.
@@ -12,7 +12,7 @@ class RoomView(generics.ListAPIView):
     serializer_class = RoomSerializer
 
 class GetRoom(APIView):
-    serializer_class = RoomSerializer
+    serializer_class = GetRoomSerializer
     lookup_url_kwarg = 'code'
 
     def get(self, request, format=None):
@@ -33,7 +33,7 @@ class GetRoom(APIView):
         return Response('Code paramater not found in request', status=status.HTTP_400_BAD_REQUEST)
 
 class JoinRoom(APIView):
-    serializer_class = RoomSerializer
+    serializer_class = GetRoomSerializer
     lookup_url_kwarg = 'code'
 
     def post(self, request, format=None):
@@ -77,7 +77,7 @@ class CreateRoom(APIView):
             # Create and save room in db.
             room = Room(title=title, host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
             room.save()
-            return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+            return Response(GetRoomSerializer(room).data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -96,7 +96,7 @@ class LeaveRoom(APIView):
                 if not user.all_rooms.filter(code=code).exists():
                     return Response('You are not hosting or a member of this group', status=status.HTTP_409_CONFLICT)
 
-                if user.hosted_room.id == room.id:
+                if user.hosted_room and user.hosted_room.id == room.id:
                     room.delete()
                 else:
                     Room.leave(user, room)
@@ -134,7 +134,7 @@ class UpdateRoom(APIView):
             room.guest_can_pause = guest_can_pause
             room.save(update_fields=['title', 'votes_to_skip', 'guest_can_pause'])
 
-            return Response(self.serializer_class(room).data, status=status.HTTP_200_OK)
+            return Response(GetRoomSerializer(room).data, status=status.HTTP_200_OK)
 
         return Response('Invalid data', status=status.HTTP_400_BAD_REQUEST)
 
