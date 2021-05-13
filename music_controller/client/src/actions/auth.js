@@ -10,7 +10,7 @@ const URL_SIGNUP_USER = '/auth/users/';
 const URL_USER_ACTIVATION = '/auth/users/activation/';
 const URL_PASSWORD_RESET = '/auth/users/reset_password/';
 const URL_PASSWORD_RESET_CONFIRM = '/auth/users/reset_password_confirm/';
-const URL_UPDATE_USER_PROFILE = '/auth/update-profile';
+const URL_UPDATE_USER_PROFILE = '/api/update-profile';
 
 const URL_IS_SPOTIFY_AUTHENTICATED = '/spotify/is-authenticated'
 const URL_GET_SPOTIFY_AUTH_URL = '/spotify/get-auth-url';           // redirects
@@ -283,20 +283,21 @@ export const resetPasswordConfirm = (uid, token, new_password, re_new_password, 
 };
 
 export const updateProfile = (id, first_name, last_name, onSuccess, onFailure) => async dispatch => {
-    if (!first_name, !last_name) {
+    if (!id || !first_name || !last_name) {
         onFailure && onFailure('Please fill all the details.');
         return;
     }
 
-    console.log('updateProfile: ', id, first_name, last_name, onSuccess, onFailure)
     if (localStorage.getItem('accessToken')) {
         const config = {
-            'Content-Type': 'application/json',
-            'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
-            'Accept': 'application/json'
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('accessToken')}`,
+                'Accept': 'application/json'
+            }
         };
 
-        const body = JSON.stringify({ id, first_name, last_name  });
+        const body = JSON.stringify({ id, first_name, last_name });
 
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}${URL_UPDATE_USER_PROFILE}`, body, config)
@@ -307,7 +308,10 @@ export const updateProfile = (id, first_name, last_name, onSuccess, onFailure) =
                 payload: res.data
             });
         } catch (err){
-            const errMsg = (err.response && err.response.data);
+            var errMsg = (err.response && err.response.data);
+            if (typeof errMsg == 'object' && errMsg.detail) {
+                errMsg = errMsg.detail
+            }
             onFailure && onFailure(errMsg || 'Failed to update profile');
             dispatch({
                 type: actionTypes.authActions.USER_PROFILE_SAVE_FAIL,
