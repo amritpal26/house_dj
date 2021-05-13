@@ -34,6 +34,7 @@ export default function(state = initialState, action) {
                 ...state,
                 isAuthenticated: false
             }
+        case actionTypes.authActions.USER_PROFILE_SAVE_SUCCESS:
         case actionTypes.authActions.USER_LOAD_SUCCESS:
             return {
                 ...state,
@@ -59,6 +60,7 @@ export default function(state = initialState, action) {
                 ...state,
                 user: null
             }
+        case actionTypes.authActions.USER_PROFILE_SAVE_FAIL:
         case actionTypes.authActions.PASSWORD_RESET_SUCCESS:
         case actionTypes.authActions.PASSWORD_RESET_FAIL:
         case actionTypes.authActions.PASSWORD_RESET_CONFIRM_SUCCESS:

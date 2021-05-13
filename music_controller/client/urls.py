@@ -27,6 +27,7 @@ urlpatterns = [
     path('reset-password', index, name='index'),
     path('password/reset/confirm/<str:uid>/<str:token>', index, name='index'),
     path('activate/<str:uid>/<str:token>', index, name='index'),
+    path('update-profile', index, name='index'),
 
     # Rooms
     path('create-room', index, name='index'),

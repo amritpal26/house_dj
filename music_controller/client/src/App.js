@@ -14,6 +14,7 @@ import Signup from './containers/Signup';
 import ResetPassword from './containers/ResetPassword';
 import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
 import Activate from './containers/Activate';
+import UpdateProfile from './containers/UpdateProfile';
 
 // Redirects
 import Google from './containers/Google';
@@ -43,6 +44,7 @@ export default function App() {
                                     <Route exact path='/activate/:uid/:token' component={ Activate } />
                                     <Route exact path='/reset-password' component={ ResetPassword } />
                                     <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
+                                    <Route exact path='/update-profile' component={ UpdateProfile } />
                                     <Route exact path='/create-room' component={ EditRoom }></Route>
                                     <Route exact path="/edit-room/:roomCode" component={ EditRoom }></Route>
                                     <Route exact path="/join-room" component={ JoinRoom }></Route>

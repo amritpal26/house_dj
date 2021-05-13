@@ -98,7 +98,7 @@ const Signup = ({ signUp, isAuthenticated }) => {
                 </Avatar>
                 <Typography component='h1' variant='h4'>
                     Sign Up
-                            </Typography>
+                </Typography>
                 <ValidatorForm
                     instantValidate={false}
                     className={classes.form}
