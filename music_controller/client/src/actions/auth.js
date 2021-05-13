@@ -13,7 +13,7 @@ const URL_PASSWORD_RESET_CONFIRM = '/auth/users/reset_password_confirm/';
 
 const URL_IS_SPOTIFY_AUTHENTICATED = '/spotify/is-authenticated'
 const URL_GET_SPOTIFY_AUTH_URL = '/spotify/get-auth-url';           // redirects
-const URL_AUTHENTICATE_SPOTIFY = '/spotify/authenticate'
+const URL_AUTHENTICATE_SPOTIFY = '/spotify/authenticate';
 
 export const loadUser = (onSuccess, onFailure) => async dispatch => {
     if (localStorage.getItem('accessToken')) {
@@ -174,7 +174,9 @@ export const login = (email, password, onSuccess, onFailure) => async dispatch =
 
         dispatch(loadUser());
     } catch (err) {
-        onSuccess && onFailure(err);
+        const errorMessage = err.response && err.response.data && err.response.data.detail;
+        onSuccess && onFailure(errorMessage || 'Failed to login');
+
         dispatch({
             type: actionTypes.authActions.LOGIN_FAIL
         })

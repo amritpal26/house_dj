@@ -3,13 +3,16 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Card, Avatar, TextField, Button, Typography, Box, FormControl } from '@material-ui/core';
+import { Card, Avatar, Button, Typography, FormControl } from '@material-ui/core';
 import { login } from '../actions/auth';
+import { showError } from '../actions/alert';
 import TextLine from '../components/TextLine';
 import LoadingButton from '../components/LoadingButton';
 import PageLoader from '../components/PageLoader';
 import axios from 'axios';
 import theme, { Colors } from '../theme';
+import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -30,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated, showError }) => {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -47,8 +50,9 @@ const Login = ({ login, isAuthenticated }) => {
         setIsLoading(false);
     };
 
-    const onLoginFailure = () => {
-        // TODO: handle login failure and show error message.
+    const onLoginFailure = (err) => {
+        const errMsg = typeof err == 'string' ? err : 'Failed to login';
+        showError(errMsg);
         setIsLoading(false);
     };
 
@@ -64,18 +68,16 @@ const Login = ({ login, isAuthenticated }) => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}/google`);
             window.location.replace(res.data.authorization_url);
         } catch (err) {
-            // TODO: handle the error here.
+            showError(err);
         }
     };
 
     const continueWithFacebook = async () => {
-        console.log('continue with facebook');
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/facebook/?redirect_uri=${process.env.REACT_APP_API_URL}/facebook`)
-
             window.location.replace(res.data.authorization_url);
         } catch (err) {
-            // TODO: handle the error here.
+            showError(err);
         }
     };
 
@@ -94,9 +96,13 @@ const Login = ({ login, isAuthenticated }) => {
                 <Typography component='h1' variant='h4'>
                     Sign in
                     </Typography>
-                <form className={classes.form} noValidate autoComplete='none' onSubmit={e => onSubmit(e)}>
-                    <TextField
-                        required
+                <ValidatorForm 
+                    className={classes.form} 
+                    instantValidate={false}
+                    autoComplete='none' 
+                    onSubmit={onSubmit}
+                >
+                    <TextValidator
                         fullWidth
                         autoFocus
                         name='email'
@@ -104,10 +110,12 @@ const Login = ({ login, isAuthenticated }) => {
                         label='Email Address'
                         margin='normal'
                         autoComplete='none'
+                        validators={['required', 'isEmail']}
+                        value={formData.email}
+                        errorMessages={['This field is required', 'Email is not valid']}
                         onChange={onChange}
                     />
-                    <TextField
-                        required
+                    <TextValidator
                         fullWidth
                         name='password'
                         variant='outlined'
@@ -115,16 +123,18 @@ const Login = ({ login, isAuthenticated }) => {
                         label='Password'
                         type='password'
                         autoComplete='new-password'
+                        validators={['required']}
+                        value={formData.password}
+                        errorMessages={['This field is required']}
                         onChange={onChange}
                     />
                     <LoadingButton
                         fullWidth
                         className={classes.signInButton}
                         isLoading={isLoading}
-                        onClick={onSubmit}
                     >Sign In
                         </LoadingButton>
-                </form>
+                </ValidatorForm>
                 <TextLine text='OR' marginTop={theme.spacing(2)} />
                 <FormControl fullWidth >
                     <Button
@@ -157,4 +167,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, showError })(Login);
