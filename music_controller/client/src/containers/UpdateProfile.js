@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import { Card, Typography, TextField } from '@material-ui/core';
-import LoadingButton from '../components/LoadingButton';
+import { Card, Typography, TextField, Button, CircularProgress } from '@material-ui/core';
 import { updateProfile } from '../actions/auth';
 import { showSuccess, showError } from '../actions/alert';
 
@@ -20,6 +19,10 @@ const useStyles = makeStyles(theme => ({
     },
     formContent: {
         flexGrow: 1
+    },
+    buttonsContainer: {
+        display: 'flex',
+        justifyContent: 'space-evenly'
     }
 }));
 
@@ -56,6 +59,7 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
                 <Typography component='h1' variant='h4'>
                     Profile
                 </Typography>
+                {isLoading && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
                 <ValidatorForm
                     instantValidate={false}
                     className={classes.form}
@@ -67,6 +71,7 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
                             variant='outlined'
                             label='Email Address'
                             margin='normal'
+                            disabled={isLoading}
                             inputProps = {{ readOnly: true }}
                             value={formData.email}/>
                         <TextValidator
@@ -78,6 +83,7 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
                             margin='normal'
                             autoComplete='none'
                             onChange={onChange}
+                            disabled={isLoading}
                             value={formData.first_name}
                             validators={['required']}
                             errorMessages={['This field is required']}/>
@@ -89,17 +95,20 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
                             margin='normal'
                             autoComplete='none'
                             onChange={onChange}
+                            disabled={isLoading}
                             value={formData.last_name}
                             validators={['required']}
                             errorMessages={['This field is required']}
                         />
                     </div>
-                    <LoadingButton
-                        fullWidth
-                        className={classes.saveButton}
-                        isLoading={isLoading}
-                    >Save
-                    </LoadingButton>
+                    <div className={classes.buttonsContainer}>
+                        <Button
+                            variant='outlined'
+                            disabled={isLoading}
+                            type='submit'
+                        >Save
+                        </Button>
+                    </div>
                 </ValidatorForm>
             </div>
         </Card>
