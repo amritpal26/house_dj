@@ -38,13 +38,16 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-evenly',
         marginTop: theme.spacing(1)
     },
+    emailConfirmedMessage: {
+        textAlign: 'center',
+    }
 }));
 
 const ResetPassword = ({ isAuthenticated, resetPassword }) => {
     const classes = useStyles();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false)
-    const [emailConfirmed, setEmailConfirmed] = useState(false);
+    const [emailConfirmed, setEmailConfirmed] = useState(true);
     const [email, setEmail] = useState('');
 
     const onEmailChange = e => setEmail(e.target.value);
@@ -85,9 +88,9 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
                     <Typography component='p' variant='h6'>
                         Email Confirmed
                         </Typography>
-                    <Typography component='p' variant='body1' style={{ textAlign: 'center' }}>
+                    <Typography component='p' variant='body1' className={classes.emailConfirmedMessage}>
                         Please check your email to for a link to confirm password.
-                        </Typography>
+                    </Typography>
                 </div>}
 
                 {!emailConfirmed && <ValidatorForm

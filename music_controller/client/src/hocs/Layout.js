@@ -17,14 +17,20 @@ const useStyles = makeStyles(() => ({
     alert: {
         minWidth: '360px',
         maxWidth: '720px'
+    },
+    muiAlert: {
+        minWidth: '360px'
+    },
+    appContainer: {
+        flex: 1,
     }
 }));
 
 function Alert(props) {
     return <MuiAlert
         elevation={6} 
-        variant="filled" 
-        style={{ minWidth: '360px' }}
+        variant="filled"
+        className={classes.muiAlert}
         {...props} 
     />;
 }
@@ -82,7 +88,7 @@ const Layout = ({ error, success, checkAuthenticated, loadUser, hideError, hideS
                     {success}
                 </Alert>
             </Snackbar>
-            <div style={{ flex: '1' }}>
+            <div className={classes.appContainer}>
                 {children}
             </div>
         </div>

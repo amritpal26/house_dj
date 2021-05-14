@@ -59,7 +59,7 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
                 <Typography component='h1' variant='h4'>
                     Profile
                 </Typography>
-                {isLoading && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
+                {isLoading && <CircularProgress className='circular-progress' />}
                 <ValidatorForm
                     instantValidate={false}
                     className={classes.form}

@@ -66,7 +66,7 @@ const JoinRoom = ({ joinRoom, showSuccess, showError }) => {
                     Join A Room
                     </Typography>
 
-                {isJoiningRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
+                {isJoiningRoom && <CircularProgress className='circular-progress' />}
                 <ValidatorForm
                     className={classes.form}
                     onSubmit={onJoinRoom}>
@@ -79,7 +79,7 @@ const JoinRoom = ({ joinRoom, showSuccess, showError }) => {
                             onChange={onCodeChange}
                             validators={['required']}
                             errorMessages={['Room Code is required']}
-                            style={{ width: '100%' }}
+                            className='full-width'
                         />
                     </div>
 

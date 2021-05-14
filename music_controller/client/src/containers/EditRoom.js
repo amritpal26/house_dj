@@ -127,7 +127,7 @@ const EditRoom = ({ createRoom, getRoom, updateRoom, showSuccess, showError }) =
                     {isEditRoom ? 'Update Room' : 'Create Room'}
                     </Typography>
 
-                {isSavingRoom && <CircularProgress style={{ position: 'absolute', top: '50%', zIndex: 100 }} />}
+                {isSavingRoom && <CircularProgress className='circular-progress' />}
                 <ValidatorForm
                     className={classes.form}
                     onSubmit={onSaveRoom}>
@@ -141,7 +141,7 @@ const EditRoom = ({ createRoom, getRoom, updateRoom, showSuccess, showError }) =
                             value={formData.title}
                             validators={['required']}
                             errorMessages={['Name is required']}
-                            style={{ width: '100%' }}
+                            className='full-width'
                         />
                         <TextValidator
                             type='number'
@@ -153,7 +153,7 @@ const EditRoom = ({ createRoom, getRoom, updateRoom, showSuccess, showError }) =
                             helperText='Votes required to skip a song'
                             validators={['required', 'isStrictPositive']}
                             errorMessages={['This field is required', 'Votes to skip should be greater than 0']}
-                            style={{ marginTop: '8px', width: '100%' }}
+                            className='full-width margin-top-small'
                         />
                         <FormControl component="fieldset">
                             <FormControlLabel

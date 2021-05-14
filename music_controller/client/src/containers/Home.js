@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-evenly',
         marginTop: theme.spacing(1)
     },
+    noRoomsMessage: {
+        textAlign: 'center',
+        margin: 'auto',
+    }
 }));
 
 const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
@@ -78,7 +82,7 @@ const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
         </Typography>
     );
     const noRoomsMessage = (
-        <div style={{ textAlign: 'center', margin: 'auto' }}>
+        <div className={classes.noRoomsMessage}>
             <Typography component='p' variant='h6'>
                 No Rooms available
             </Typography>
