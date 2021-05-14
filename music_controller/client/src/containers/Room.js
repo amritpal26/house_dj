@@ -4,11 +4,15 @@ import { getRoom, currentlyPlaying, playSong, pauseSong, skipSong, leaveRoom } f
 import { requestSpotifyAuthorization } from '../actions/auth';
 import { showSuccess, showError } from '../actions/alert';
 import { connect } from 'react-redux';
-import { makeStyles, Card, Typography, Button } from "@material-ui/core";
+import { makeStyles, Card, Typography, Button, Divider } from "@material-ui/core";
 import PageLoader from '../components/PageLoader';
 import MusicPlayer from '../components/MusicPlayer';
+import MemberList from '../components/MemberList';
+import Config from '../configs';
 
-const POLLING_INTERVAL_MS = 1500;
+const ROOM_POLLING_INTERVAL_MS = Config.constants.ROOM_POLLING_INTERVAL_MS;
+const SONG_POLLING_INTERVAL_MS = Config.constants.SONG_POLLING_INTERVAL_MS;
+
 const useStyles = makeStyles((theme) => ({
     playerContainer: { 
         display: 'flex', 
@@ -22,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         marginTop: theme.spacing(1)
+    },
+    hostButton: {
+        textTransform: 'none',
+    },
+    divider: {
+        width: '100%',
     }
 }));
 
@@ -34,6 +44,7 @@ const Room = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     var fetchSongInterval = null;
+    var fetchRoomInterval = null;
 
     const onCurrentlyPlayingSuccess = (song) => {
         setSong(song);
@@ -72,13 +83,21 @@ const Room = (props) => {
         } else if (room.is_host && !props.isSpotifyAuthenticated) {
             props.requestSpotifyAuthorization(null, onSpotifyAuthFail);
         } else {
-            fetchSongInterval = setInterval(() =>
-                props.currentlyPlaying(onCurrentlyPlayingSuccess, null), POLLING_INTERVAL_MS);
+            fetchSongInterval = setInterval(() => {
+                props.currentlyPlaying(onCurrentlyPlayingSuccess, null)
+            }, SONG_POLLING_INTERVAL_MS);
+            
+            fetchRoomInterval = setInterval(() => {
+                props.getRoom(roomCode, true, onGetRoomSuccess, onGetRoomFailure);
+            }, ROOM_POLLING_INTERVAL_MS);
         }
 
         return () => {
             if (fetchSongInterval) {
                 clearInterval(fetchSongInterval);
+            }
+            if (fetchRoomInterval) {
+                clearInterval(fetchRoomInterval);
             }
         }
     }, [props.isSpotifyAuthenticated, room]);
@@ -97,9 +116,16 @@ const Room = (props) => {
                 <Typography component='h6' variant='h6'>
                     {`Code: ${room.code}`}
                 </Typography>
-                <Typography color='textSecondary' variant='subtitle1'>
-                    Share this code to let others join
-                </Typography>
+
+                <Divider className={classes.divider}/>
+
+                <div className={classes.buttonsContainer}>
+                    <MemberList members={room.members}/>
+                    {!room.is_host && <Button
+                        className={classes.hostButton}
+                        >{`Host: ${room.host.first_name} ${room.host.last_name}`}
+                    </Button>}
+                </div>
 
                 <div className={classes.playerContainer}>
                     <div>
@@ -126,7 +152,7 @@ const Room = (props) => {
                     <Button
                         variant='outlined'
                         onClick={() => props.leaveRoom(room.code, onLeaveRoomSuccess, onLeaveRoomFailure)}
-                        >Leave
+                    >Leave
                     </Button>
                 </div>
             </div>

@@ -24,7 +24,8 @@ export const Colors = {
     // Buttons
     FACEBOOK_BTN: blue[500],
     GOOGLE_BTN: blue[500],
-    NAVBAR_LINKS_TEXT: '#fff'
+    NAVBAR_LINKS_TEXT: '#fff',
+    MEMBERS_LIST_BACKGROUND: purple[100],
 };
 
 export default theme;
