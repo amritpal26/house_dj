@@ -3,25 +3,36 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
 const TextLine = (props) => {
-    
+
     const useStyles = makeStyles(() => ({
         container: {
             width: "100%",
             marginTop: props.marginTop,
-            marginBottom: props.marginBottom
+            marginBottom: props.marginBottom,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+        },
+        text: {
+            flexShrink: '1',
+            textAlign: 'center',
+            color: props.color,
+            margin: "0px 8px",
+        },
+        line: {
+            flex: '1',
+            height: '1px', 
+            backgroundColor: props.color
         }
     }));
 
     const classes = useStyles();
     return (
         <div className={classes.container} >
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <div style={{ flex: 1, height: 1, backgroundColor: props.color }} />
-                <div>
-                    <span style={{ width: 50, textAlign: 'center', color: props.color, margin: "0px 16px" }}>{ props.text }</span>
-                </div>
-                <div style={{ flex: 1, height: 1, backgroundColor: props.color }} />
-            </div>
+            <div className={classes.line} />
+            <span className={classes.text}>{ props.text }</span>
+            <div className={classes.line} />
         </div>
     )
 };
