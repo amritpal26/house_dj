@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
         maxWidth: '720px'
     },
     muiAlert: {
-        minWidth: '360px'
+       
     },
     appContainer: {
         flex: 1,
@@ -30,7 +30,7 @@ function Alert(props) {
     return <MuiAlert
         elevation={6} 
         variant="filled"
-        className={classes.muiAlert}
+        style={{ minWidth: '360px' }}
         {...props} 
     />;
 }
