@@ -5,3 +5,5 @@ music_controller/client/static/scripts/index.js.LICENSE.txt
 
 *__pycache__/
 music_controller/spotify/secrets.py
+
+.DS_Store
