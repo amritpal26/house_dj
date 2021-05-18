@@ -93,7 +93,7 @@ const Login = ({ login, isAuthenticated, showError }) => {
                 <Avatar className='card-avatar'>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4'>
                     Sign in
                     </Typography>
                 <ValidatorForm 
@@ -151,10 +151,10 @@ const Login = ({ login, isAuthenticated, showError }) => {
                     >Sign in with Facebook</Button>
                 </FormControl>
                 <div className={classes.links}>
-                    <Typography component='h1' variant='body2'>
+                    <Typography component='p' variant='body2'>
                         Don't have an account? <Link to='/signup'>Sign Up</Link>
                     </Typography>
-                    <Typography component='h1' variant='body2'>
+                    <Typography component='p' variant='body2'>
                         Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
                     </Typography>
                 </div>

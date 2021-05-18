@@ -96,7 +96,7 @@ const Signup = ({ signUp, isAuthenticated }) => {
                 <Avatar className='card-avatar'>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4'>
                     Sign Up
                 </Typography>
                 <ValidatorForm
@@ -176,7 +176,7 @@ const Signup = ({ signUp, isAuthenticated }) => {
                 </ValidatorForm>
                 <TextLine text='OR' marginTop={theme.spacing(2)} />
                 <div className={classes.links}>
-                    <Typography component='h1' variant='body2'>
+                    <Typography component='p' variant='body2'>
                         Already have an account? <Link to='/login'>Sign In</Link>
                     </Typography>
                 </div>

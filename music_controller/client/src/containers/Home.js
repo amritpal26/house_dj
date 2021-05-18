@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     noRoomsMessage: {
         textAlign: 'center',
         margin: 'auto',
-    }
+    },
 }));
 
 const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
@@ -83,7 +83,7 @@ const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
     );
     const noRoomsMessage = (
         <div className={classes.noRoomsMessage}>
-            <Typography component='p' variant='h6'>
+            <Typography component='h6' variant='h6'>
                 No Rooms available
             </Typography>
             <Typography component='p' variant='body1'>
@@ -95,9 +95,9 @@ const Home = ({ rooms, getMyRooms, leaveRoom, showSuccess, showError }) => {
     return (
         <Card className='card center' >
             <div className='paper'>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4' className='page-header'>
                     Welcome to House DJ!
-                    </Typography>
+                </Typography>
 
                 {!isAnyRoom && noRoomsMessage}
                 {sorted_rooms.map(type => {

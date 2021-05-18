@@ -56,7 +56,7 @@ const UpdateProfile = ({ user, updateProfile, showSuccess, showError }) => {
     return (
         <Card className='card center' >
             <div className='paper'>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4'>
                     Profile
                 </Typography>
                 {isLoading && <CircularProgress className='circular-progress' />}

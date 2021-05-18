@@ -105,7 +105,7 @@ const Navbar = ({ isAuthenticated, logout }) => {
         <Fragment>
             <AppBar position="relative">
                 <Toolbar variant="dense">
-                    <Typography variant="h5" color="inherit" className={classes.title}>
+                    <Typography component='h5' variant="h5" color="inherit" className={classes.title}>
                         {Configs.constants.APP_NAME}
                     </Typography>
                     {isAuthenticated ? authorizedLinks() : guestLinks()}

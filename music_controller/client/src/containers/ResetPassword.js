@@ -80,12 +80,12 @@ const ResetPassword = ({ isAuthenticated, resetPassword }) => {
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4'>
                     Reset Password
                     </Typography>
 
                 {emailConfirmed && <div className={classes.contentContainer}>
-                    <Typography component='p' variant='h6'>
+                    <Typography component='h6' variant='h6'>
                         Email Confirmed
                         </Typography>
                     <Typography component='p' variant='body1' className={classes.emailConfirmedMessage}>

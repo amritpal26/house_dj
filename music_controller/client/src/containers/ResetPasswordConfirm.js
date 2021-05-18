@@ -104,7 +104,7 @@ const ResetPasswordConfirm = ({ match, isAuthenticated, resetPasswordConfirm, sh
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component='h1' variant='h4'>
+                <Typography component='h4' variant='h4'>
                     Reset Password
                     </Typography>
 

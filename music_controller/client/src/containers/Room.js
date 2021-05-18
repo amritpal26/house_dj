@@ -109,7 +109,7 @@ const Room = (props) => {
     return (
         <Card className='card center' >
             <div className='paper'>
-                <Typography component='h3' variant='h3'>
+                <Typography component='h4' variant='h4'>
                     {room.title}
                 </Typography>
 

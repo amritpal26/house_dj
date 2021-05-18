@@ -18,7 +18,7 @@ const MusicPlayer = (props) => {
                 </Grid>
 
                 <Grid item align='center' xs={8}>
-                    <Typography component='h5' variant='h4'>
+                    <Typography component='h5' variant='h5'>
                         {props.title}
                     </Typography>
                     <Typography color='textSecondary' variant='subtitle1'>
