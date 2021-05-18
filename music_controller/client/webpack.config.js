@@ -22,6 +22,10 @@ module.exports = {
 				enforce: 'pre',
 				use: ['source-map-loader'],
 			},
+			{
+				test: /\.scss$/,
+				use: ['style-loader', 'css-loader', 'sass-loader']
+			}
 		],
 	},
 	optimization: {

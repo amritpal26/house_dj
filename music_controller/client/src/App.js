@@ -7,6 +7,7 @@ import store from './store';
 import Layout from './hocs/Layout';
 import Bubbles from './particles/Bubbles';
 import { ThemeProvider } from '@material-ui/styles';
+import './index.scss'
 
 // Auth
 import Login from './containers/Login';

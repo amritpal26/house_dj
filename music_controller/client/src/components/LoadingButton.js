@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     wrapper: {
         display: 'flex',
         justifyContent: 'center',
-        margin: theme.spacing(1),
+        margin: `${theme.spacing(1)}px 0px`,
         position: 'relative',
         width: '100%',
 

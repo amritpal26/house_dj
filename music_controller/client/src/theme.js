@@ -11,13 +11,36 @@ const theme = createMuiTheme({
         }
     },
     typography: {
-        h5: {
-            color: '#fff'
-        },
         h4: {
-            color: '#000'
+            color: '#000',
+            '@media (max-width: 480px)': {
+                fontSize: '1.7rem',
+            },
+        },
+        h5: {
+            color: '#000',
+            '@media (max-width: 480px)': {
+                fontSize: '0.9rem',
+            },
+        },
+        h6: {
+            '@media (max-width: 480px)': {
+                fontSize: '0.7rem',
+            },
+        },
+        subtitle1: {
+            '@media (max-width: 480px)': {
+                fontSize: '0.7rem',
+            },
         }
     },
+    overrides: {
+        MuiCard: {
+            root: {
+                overflow: 'scroll'
+            }
+        }
+    }
 });
 
 export const Colors = {
