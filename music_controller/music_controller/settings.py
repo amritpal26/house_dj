@@ -95,11 +95,12 @@ DATABASES = {
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = ‘django.core.mail.backends.smtp.EmailBackend’
 # EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
 # EMAIL_HOST_USER = '[YOUR EMAIL THAT WILL SEND]'
-# EMAIL_HOST_PASSWORD = '[YOUR EMAIL APP PASSWORD]'
-# EMAIL_USE_TLS = True
+# EMAIL_HOST_PASSWORD = '[YOUR EMAIL PASSWORD]'
 
 
 # Password validation
@@ -183,8 +184,8 @@ DJOSER = {
     }
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '[YOUR GOOGLE API KEY]'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '[YOUR GOOGLE API SECRET]'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
